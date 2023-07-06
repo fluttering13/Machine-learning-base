@@ -63,16 +63,48 @@ $${{{W_T}{W_f}} \over {|{W_T}||{W_f}|}} = {{\left( {{W_0} + T\min YX} \right){W_
 
 分式下方可由上述的回歸關係給出，註：也如果從 ${\rm{|}}{W_T}{{\rm{|}}^2} = {W_0}^2 + {T^2}YX + 2T......$ 給出的是 $T^2$ 不是最靠近的bound，要從回歸關係找
 
-我們令 $W_0=0$ 再令$|Y{|^2} = 1$ 標籤化簡一下我們可以得到 
+我們令 $W_0=0$ 再令 $|Y{|^2} = 1$ 標籤化簡一下我們可以得到 
 
 $${{\sqrt T \min \left( {Y{W_f}X} \right)} \over {\max X}}$$
 
-我們得到了一個$\sqrt T$，再稍微移項整理一下
+我們得到了一個 $\sqrt T$，再稍微移項整理一下
 
 $${{\max X} \over {\min Y{{{W_f}} \over {{\rm{|}}{W_f}{\rm{|}}}}X}} \ge T$$
 意思是更新步數 其實在這個演算法下其實是有一個上界在，也就是說最多最多你需要這麼多步就可以找到最佳值
 
 當然上述我們必須在線性可分的前提下才能找到最佳解
+
+
+```
+
+###PLA 實作
+#首先我們需要一些模擬數據幫助我們做分析
+import numpy as np
+import matplotlib.pyplot as plt
+lambda_noise=0.1
+mock_data_number=30
+bias_1=0.3
+bias_2=-0.3
+solpe_1=0.3
+solpe_2=0.5
+X=np.arange(1,mock_data_number+1,1)
+x1=solpe_1*X+np.random.random(mock_data_number)*lambda_noise*mock_data_number+bias_1*mock_data_number
+x1=x1/max(x1)
+x2=solpe_2*X+np.random.random(mock_data_number)*lambda_noise*mock_data_number+bias_2*mock_data_number
+x2=x2/max(x2)
+plt.scatter(X,x1)
+plt.scatter(X,x2)
+x0=np.zeros(mock_data_number)
+all_data=np.concatenate([np.array([x0,X,x1,np.ones(mock_data_number)]),np.array([x0,X,x2,-np.ones(mock_data_number)])],1)
+w_0=np.zeros([3])
+w=w_0
+
+for i in range(0,60):
+  while np.sign(all_data[:-1,i].dot(w))!=all_data[3,i]:
+    w=w+all_data[3,i]*all_data[:-1,i]
+print(w)
+plt.plot(X,-w[2]/w[1]*X)
+```
 
 
 
