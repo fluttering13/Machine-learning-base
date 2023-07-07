@@ -3,7 +3,7 @@
 
 在早期的很多演算法的東西都是從生物的機制獲得靈感而來的，其中這個感知器
 便是從神經元的概念所啟發。神經元中的突觸，需要生物電壓超過一定的閥值才能啟動，所以是二元性的
-
+<div align=center><img src="https://github.com/fluttering13/Machine-learning-base/tree/master/pic/450px-Complete_neuron_cell_diagram_zh.png" width="500px"/></div>
 日常也有很多二元性質的問題，例如：
 
 這家餐廳值不值得去吃？
@@ -119,9 +119,10 @@ plt.scatter(x1,y1)
 plt.scatter(x2,y2)
 plt.plot(line,line*-w[1]/w[2]+-w[0]/w[2])
 ```
-
+<div align=center><img src="https://github.com/fluttering13/Machine-learning-base/tree/master/pic/PLA1.png" width="500px"/></div>
 
 但是native PLA在以下的例子會壞掉
+<div align=center><img src="https://github.com/fluttering13/Machine-learning-base/tree/master/pic/PLA2.png" width="500px"/></div>
 ```
 
 ###PLA 實作
@@ -152,7 +153,8 @@ for i in range(0,60):
 print(w)
 plt.plot(X,-w[2]/w[1]*X)
 ```
-
+調整完了演算法 以下這個看起來還可以接受了！
+<div align=center><img src="https://github.com/fluttering13/Machine-learning-base/tree/master/pic/PLA3.png" width="500px"/></div>
 
 
 
