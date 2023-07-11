@@ -114,9 +114,9 @@ $$
 
 假設我們從一個母體作抽樣，抽樣過程都是獨立同分布(i.i.d) 總共抽N筆資料，
 
-把採樣集的結果，所佔的比例為 $\mu$，
+把母體的結果，所佔的比例為 $\mu$，
 
-把測試集的結果，所佔的比例為 $\nu$
+把取樣集的結果，所佔的比例為 $\nu$
 
 我們令這兩的比例的誤差為 $\epsilon$
 
@@ -132,16 +132,96 @@ $$P[{\rm{|}}\mu {\rm{ - }}\nu {\rm{| < }}\varepsilon ] \ge 2\exp \left( { - 2{\v
 
 上述是我們只對一個hypothesis做思考，但假如我們今天有M個hypothesis呢？從union bound可以給出
 $$P[{\rm{|}}\mu {\rm{ - }}\nu {\rm{| < }}\varepsilon ] \ge 2 M \exp \left( { - 2{\varepsilon ^2}N} \right)$$
-這是因為我們今天對M個hypothesis之間沒有做限制，而這會導致這個bound在N很大的時候會發散掉，
+這是因為我們今天對 $M$ 個hypothesis之間沒有做限制，而這會導致這個bound在N很大的時候會發散掉，
 
-例如說在PLA裡面，M就可以有無窮多線去拆分不同多個標籤
+例如說在PLA裡面，$M$ 就可以有無窮多線去拆分不同多個標籤，也就是 $m$ 有無窮大的選擇
 
-**小的 $M$，可以讓我們做到 取樣集錯誤率 $\mu$ 跟 測試集錯誤率 $\nu$ 很接近，但太少的選擇 $M$ 不一定找到很小的錯誤率**
+**小的 $M$，可以讓我們做到 母體錯誤率 $\mu$ 跟 取樣集錯誤率 $\nu$ 很接近，但太少的選擇 $M$ 不一定找到很小的錯誤率**
 
-**大的 $M$，看起來做不到取樣集錯誤率 $\mu$ 跟 測試集錯誤率 $\nu$ 很接近，於是我們要引入限制，讓 $P$ 還是可以收斂**
+**大的 $M$，看起來做不到 母體錯誤率 $\mu$ 跟 取樣集錯誤率 $\nu$ 很接近，於是我們要引入限制，讓 $P$ 還是可以收斂**
+
+### 修正後的公式 Vapnik-Chervonenkis bound
+$$P[{\rm{|}}\mu {\rm{ - }}\nu {\rm{| > }}\varepsilon ] \le 4{M_H}\left( {2N} \right)\exp \left( { - {1 \over 8}{\varepsilon ^2}N} \right)$$
+我們先給出這個結論，或是先給出一個對於去修正公式的直覺
+1. 我們希望 $N$ 是隨著自然指數遞減
+2. 我們希望引入成長函數 $M_H$ ，且它是多項式成長的
+3. 我們上述都是母體與取樣集的比較，實際上我們是測試集與取樣集的比較
+後續我們會花很大的篇幅在講成長函數 $M_H$ ，
+最後得出 VC bound (Vapnik-Chervonenkis bound)
+## Generation theory
 
 那這個限制從那裡來呢？
 
+我們先回到 $M$ 的意義是什麼，它代表，這個參數空間要區別的可能性有多少
 
 
+### 1D positive ray
+假設我們今天做PLA，但是是在一維，現在遊戲規則是從某點開始向右取正，向左取負
+$$h\left( x \right) = sign\left( {x - a} \right)$$
+
+那現在有多少可能性呢？
+
+一個點
+
+$$\left( 0 \right),\left( 1 \right)$$
+
+兩個點
+$$\left( {0,0} \right),\left( {0,1} \right),\left( {1,1} \right)$$
+三個點
+$$\left( {0,0,0} \right),\left( {0,0,1} \right),\left( {0,1,1} \right),\left( {1,1,1} \right)$$
+
+$N$ 個點共 (從N+1個區間選點)
+$$M\left( 1 \right) = C_1^{N + 1} $$
+
+### 1D positive interval
+再來我們來看看另外一個遊戲規則是在區間內是正，其他區間為負
+$$h\left( x \right) =  + 1\ \quad if \qquad x \in \left[ {l,r} \right]$$
+
+
+一個點
+$$\left( 0 \right),\left( 1 \right)$$
+兩個點
+$$\left( {0,0} \right),\left( {0,1} \right),\left( {1,0} \right),\left( {1,1} \right)$$
+三個點
+$$\left( {0,0,0} \right),\left( {0,0,1} \right),\left( {0,1,0} \right),\left( {1,0,0} \right),\left( {0,1,1} \right),\left( {1,1,0} \right),\left( {1,1,1} \right)$$
+
+
+$N$ 個點共 (從N+1個區間選兩個，並加上都是零的這種組合)
+$$M\left( 2 \right) = C_2^{N + 1} + 1 = {N^2}/2 + N/2 + 1$$
+
+### 2D convex
+遊戲規則是PLA的參數集合為平面凸集合，而所有的資料群在平面上也是個凸集
+$$x,w \in Convex \quad set$$
+
+$N$ 個點共 (我們可以找到凸多邊形，把這些資料包起來)
+$$M\left( N \right) = {2^N}$$
+
+### 小總結
+$M(N)$ 我們把它稱作是成長函數Growth function，也就是我們想知道的限制是什麼
+
+第一個限制來自於二元性資訊量上的侷限
+$$M\left( N \right) \le {2^N}$$
+第二個限制來自於遊戲規則上造成的侷限，這邊我們可以討論一下
+
+在positive ray $N=1$ 和 positive interval $N=1,2$ 它們都滿足 $M\left( N \right) = {2^N}$，達成二元資訊上最大的滿足
+
+**我們就會說在這個狀況下被shatter**
+
+在positive ray $N=2$ 和 positive interval $N=3$，從這邊開始不滿足
+
+**N=k時，是個break point**
+
+在這邊我們可以由一個觀察或者是猜想，就是我們發現break point的地方一定跟成長函數是有正相關的，稍微觀察一下
+
+當點越多時，越容易受到遊戲規則所影響
+
+越難受到影響的，k越大的，代表成長函數成長的越快越接近 $2^N$
+
+而這種效應我們會猜測成長的速度不要是指數，是多項式的
+
+$$M\left( N \right) = O\left( {{N^{k - 1}}} \right)$$
+
+### Bounding function
+
+### Vapnik-Chervonenkis bound
 
