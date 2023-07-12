@@ -286,7 +286,7 @@ $$B\left( {N,k} \right) \le B\left( {N - 1,k} \right) + B\left( {N - 1,k - 1} \r
 總結一下
 
 $$B\left( {N,k} \right) = \sum\limits_{i = 0}^{k - 1} {C_i^N} $$
-這個bounding function其實非常的符合直覺，也就是把N個點的取樣到k直接總，在一定程度上也可以滿足二項是定理 $(1+1)^(N)$
+這個bounding function其實非常的符合直覺，也就是把 $N$ 個點的取樣到 $k$ 再加總起來，當滿足二項是定理 $(1+1)^(N)$時就是shatter！
 
 **有了這個我們就可以知道，生長函數有一個上界，而且還是多項式的**
 $${M_H}\left( N \right) \le B\left( {N,K} \right) = \sum\limits_{i = 0}^{k - 1} {C_i^N}  \le {N^{k - 1}}$$
