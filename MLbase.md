@@ -271,7 +271,10 @@ $$\eqalign{
 但加到第五個的時候，無論如何都會shatter，這個時候我們可以確定
 $$M(3)=4,B(2,3)=4$$
 
-再上去討論似乎越來越困難，可以寫程式來驗證算看看，但其實這邊有公式的
+**這是因為追加新的列的時候，假如新的列是其他列的線性組合，這個時候就會shatter**
+$${x_{k + 1}} = {c_k}{x_k} + {c_{k - 1}}{x_{k - 1}}......{c_1}{x_1}$$
+以上我們可以把它當作是定義，但其實bounding function是有公式的
+
 
 ### 快速總結公式
 上述我們已經演示完了bounding function，這邊我們直接跳過繁雜的證明
@@ -283,9 +286,10 @@ $$B\left( {N,k} \right) \le B\left( {N - 1,k} \right) + B\left( {N - 1,k - 1} \r
 總結一下
 
 $$B\left( {N,k} \right) = \sum\limits_{i = 0}^{k - 1} {C_i^N} $$
+這個bounding function其實非常的符合直覺，也就是把N個點的取樣到k直接總，在一定程度上也可以滿足二項是定理 $(1+1)^(N)$
 
 **有了這個我們就可以知道，生長函數有一個上界，而且還是多項式的**
-
+$${M_H}\left( N \right) \le B\left( {N,K} \right) = \sum\limits_{i = 0}^{k - 1} {C_i^N}  \le {N^{k - 1}}$$
 ### Vapnik-Chervonenkis bound
 上述我們已經考慮完了生長函數的修正，現在我們還要把母體 $\mu$ 改為測試集 $\mu'$，再讓總數變成 $2N$
 
@@ -298,8 +302,32 @@ $$2{M_H}\left( {2N} \right)2\exp \left( { - 2{{\left( {{\varepsilon  \over 4}} \
 我們整理一下可以拿到
 $$P[{\rm{|}}\mu {\rm{ - }}{{\nu  + \mu '} \over 2}{\rm{| > }}\varepsilon ] \le 4{M_H}\left( {2N} \right)\exp \left( { - {1 \over 8}{\varepsilon ^2}N} \right)$$
 就是VC bound！
+### VC dimension
+我們把VC dimsension定義成
+$$k - 1$$
 
+再重新回顧一下之前的例子
 
+positive ray的時候 $d_{vc}=1$ 因為我們的遊戲規則裡 可以選 $a$ 的位置
 
+positive interval的時候 $d_{vc}=2$ 因為我們的遊戲規則裡 可以選 $l,r$ 兩個位置
 
+這告訴我們說，**VC dimensio的概念其實就是在這些參數空間中有多少的自由度**
 
+再來我們回顧一下　VC bound
+$$P[{\rm{|}}\mu {\rm{ - }}{{\nu  + \mu '} \over 2}{\rm{| > }}\varepsilon ] \le 4{M_H}\left( {2N} \right)\exp \left( { - {1 \over 8}{\varepsilon ^2}N} \right)$$
+我們把 ${M_H}\left( {2N} \right)$ 直接用 ${2N}^d_{VC}$ 取代它的上限，
+$$\sqrt {{8 \over N}\ln {{4{{\left( {2N} \right)}^{{d_{VC}}}}} \over \delta P}}  \le \varepsilon $$
+我們會說這時一個權衡模型複雜度的一個方式 (the penalty for model complexity)
+
+**隨著模型複雜度增加，直覺上我們會認為表現會越好，但實際上從這個penalty就告訴你其中同時也會造成錯誤率上升**
+這就告訴我們，在實際操作上我們要選適合複雜度模型去處理我們所遇到的問題
+
+我們來代個數字
+$$\varepsilon  = 0.1, \qquad \delta  = 0.1, \qquad {d_{VC}} = 3$$
+$$N = {10^5}, \qquad \delta P \le 1.65 \times {10^{ - 38}}$$
+看起來 $d_{vc}=3$ 就需要10000筆資料才能做到，似乎是非常多，但注意，這是我們放寬了很多限制才拿到的bound
+1. 我們使用Hoffdining 不等式：無論如何的機率分布(distribution) 或是 目標函數(target function)，我們都能考慮進去
+2. 再來任意的data我們也可以考慮進去
+3. 我們做了一個多項式的近似，不是直接用 ${M_H}$ 來看
+**所以好處就是因為這個bound很寬鬆，所以它很好進行估計**
