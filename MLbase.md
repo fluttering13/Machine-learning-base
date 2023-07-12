@@ -241,7 +241,7 @@ $$B\left( {N,k} \right)$$
 
 聽起來很抽象我們來舉一個例子，來找找看在k=2時，M(N)最大可以到多少
 
-當N=1時，因為只有一個點<k，肯定shatter
+當N=1時，因為只有一個點 $<k$，肯定shatter
 
 $$M(1)=2,B(1,2)=2$$
 
@@ -290,12 +290,13 @@ $$B\left( {N,k} \right) = \sum\limits_{i = 0}^{k - 1} {C_i^N} $$
 
 **有了這個我們就可以知道，生長函數有一個上界，而且還是多項式的**
 $${M_H}\left( N \right) \le B\left( {N,K} \right) = \sum\limits_{i = 0}^{k - 1} {C_i^N}  \le {N^{k - 1}}$$
+
 ### Vapnik-Chervonenkis bound
 上述我們已經考慮完了生長函數的修正，現在我們還要把母體 $\mu$ 改為測試集 $\mu'$，再讓總數變成 $2N$
 
 意思是我們分N個去測試集，另外N個去取樣集，所以Hoffdining不等式左邊改成
 $$P[{\rm{|}}\mu {\rm{ - }}\nu '{\rm{| > }}{\varepsilon  \over 2}]$$
-假如我們今天在意的是取樣集跟 取樣集與測試集的平均
+假如我們今天在意的是取樣集跟 取樣集與測試集的平均，也就是抽出來資料後不放回。
 $$P[{\rm{|}}\mu {\rm{ - }}{{\nu  + \mu '} \over 2}{\rm{| > }}{\varepsilon  \over 4}]$$
 右式
 $$2{M_H}\left( {2N} \right)2\exp \left( { - 2{{\left( {{\varepsilon  \over 4}} \right)}^2}N} \right)$$
