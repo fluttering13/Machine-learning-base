@@ -1,4 +1,4 @@
-
+# 線性回歸 (Linear-regression)
 
 線性回歸常用於各式各樣預測性的問題：
 
@@ -25,7 +25,7 @@ $${E_{sq}} = {1 \over N}{\sum\limits_{n = 1}^N {\left( {{W^T}{X_n} - {y_n}} \rig
 簡單推導一下梯度，就發現
 $$\nabla {E_{sq}} = {1 \over N}\left( {2{X^T}XW - 2{X^T}y} \right)$$
 方差有最小在
-$${w_{lin}} = {\left( {{X^T}X} \right)^{ - 1}}{X^T}y$$
+$${W_{lin}} = {\left( {{X^T}X} \right)^{ - 1}}{X^T}y$$
 意思就是說，我們今天把這個問題變成了一個求解反矩陣的問題
 
 那我們來看看代價是什麼？
