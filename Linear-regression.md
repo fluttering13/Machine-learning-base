@@ -46,8 +46,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 #用scipy的反矩陣的數值誤差比較小
 import scipy
-lambda_noise=0.1 #生成模擬數據用的雜訊參數
-initial_m_noise=0.01 #在演算法中挑初始點的雜訊參數
 mock_data_number_each_group=100 #模擬數據數量
 
 #sample點用(而且它是保證均勻的取)
