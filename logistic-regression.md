@@ -17,23 +17,25 @@ https://github.com/fluttering13/Machine-learning-base/blob/main/Linear-regressio
 
 這個時候我們就需要從眾多DATA $X$ 優化參數 $W$ 去評估機率
 $$\alpha (wx)$$
-其中$\alpha $一個特殊的函數可以把任意的數值map到區間0到1，這邊所選取的是sigmoid函數
+其中 $\alpha $ 一個特殊的函數可以把任意的數值map到區間0到1，這邊所選取的是sigmoid函數
 $${1 \over {{e^{ - wx}} + 1}}$$
+
 至於這個函數是怎麼訂出來的，詳見
 
 https://github.com/fluttering13/Machine-learning-base/blob/main/why-and-how-to-use-activation-and-loss.md
 
-激勵函數如果選擇sigmoid，那很自然的，我們就會使用cross-entropy作為誤差函數，衡量標籤 $y$ 與模型預測 ${w^T}{x_n}$之間的對比(Contrasts)
+激勵函數如果選擇sigmoid，那很自然的，我們就會使用cross-entropy作為誤差函數，來衡量標籤 $y$ 與模型預測 ${w^T}{x_n}$ 之間的對比(Contrasts)
 
 $${E_{ce}} = {\min _w}{1 \over N}\sum\limits_n^N { - \ln \alpha \left( {{y_n}{w^T}{x_n}} \right)} $$
 
-由於這邊我們有非線性函數，所以我們直接用數值求解的方式找到誤差函數極小的值的地方
+由於這邊我們有非線性函數 $\alpha$ ，所以我們直接用數值求解的方式找到誤差函數極小的值的地方
+
 $${E_{ce}} = {\min _w}{1 \over N}\sum\limits_n^1 { - \ln \alpha \left( {{y_n}{w^T}{x_n}} \right)} $$
 接著我們就是在數學上寫下它的梯度，丟給演算法更新
 
 $$\nabla {E_{ce}} = {1 \over N}\sum\limits_n^1 { - \ln \alpha \left( {{y_n}{w^T}{x_n}} \right)} \left( {{y_n}{x_n}} \right)$$
 
-這邊的優化演算法叫做梯度下降(gradient descent)，在數值方法叫做尤拉方法，其實就是根據周邊的斜率去找極值的概念
+這邊的優化演算法叫做梯度下降GD(gradient descent)，在數值方法叫做尤拉方法，其實就是根據周邊的斜率去找極值的概念
 $$w' = w - l\nabla {E_{ce}}\left( w \right)$$
 
 接著我們來實作一下
@@ -83,7 +85,7 @@ N=np.size(y)
 
 #w初始化
 w=np.zeros([1,3])
-#GD 實作
+#設定learning rate
 lr=0.1
 for i in range(10000):
   ###其中sigmoid(-y*w.dot(x))可理解成是對(-y*x)的線性加權
