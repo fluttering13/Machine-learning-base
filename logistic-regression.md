@@ -107,7 +107,7 @@ print(sigmoid(w.dot(x_test2)))
 print(sigmoid(w.dot(x_test3)))
 ```
 這邊為了方便我們省略第0維，但在優化裡面要把它放進去
-
+ 
 在這邊我們測試一下 $(0,1)$ 跟 $(1,0)$ 這種很邊邊的點
 
 看起來都符合我們的預測 分別都很接近1跟0
@@ -122,3 +122,130 @@ print(sigmoid(w.dot(x_test3)))
 0.5342474349324107
 ```
 
+在來我們來看一下這個方式能不能延伸到多分類問題
+
+假如今天有A、B、C、D，四類標籤，前面我們用logistic處理二分類能得到一個機率，也可以把它當作一個分數
+
+1. 第一種處理方式叫做 One-versus-all decomposition：
+
+今天可以用一對多的方式去拿到不一樣的分數
+
+A可以對BCD，B可以對ACD，C可以對ABD，D可以對ABC
+
+一個點就會拿到四個分數，我們取最大的那個當作是我們的分類
+
+```
+###logistic regression 實作
+###我們來利用logistic實作多分類問題
+#首先我們需要一些模擬數據
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+#sample點用(而且它是保證均勻的取)
+def sampling_circle(sample_size,r_sqaure,x_0,y_0):
+    a = np.random.uniform(size=sample_size)*r_sqaure
+    b = np.random.uniform(size=sample_size)
+    x = np.sqrt(a) * np.cos(2 * np.pi * b)+x_0
+    y = np.sqrt(a) * np.sin(2 * np.pi * b)+y_0
+    return x, y
+###模擬數據數量
+mock_data_number_list=[10,30,30,30]
+###弄一下label，後面可以對答案
+for i in range(0,np.size(mock_data_number_list)):
+  if i==0:
+    real_label=np.zeros(mock_data_number_list[0])
+  else:
+    real_label=np.concatenate((real_label,np.ones(mock_data_number_list[i])*i))
+#把mock data們整理一下，順便加入零的維度(W參數還要考慮一個常數)
+#標籤我們後面在依據數量給
+def data_generator(mock_data_number,r,x0,y0):
+  ones=np.ones([1,mock_data_number])
+  data1=np.array(sampling_circle(mock_data_number,r**2,x0,y0))
+  label=-np.ones([1,mock_data_number])
+  plt.scatter(data1[0,:],data1[1,:])
+  data1=np.concatenate([ones,data1],0)
+  data1=np.concatenate([data1,label],0)
+  return data1
+
+data1=data_generator(mock_data_number_list[0],0.2,0.3,0.7)
+data2=data_generator(mock_data_number_list[1],0.2,0.7,0.7)
+data3=data_generator(mock_data_number_list[2],0.2,0.7,0.3)
+data4=data_generator(mock_data_number_list[3],0.2,0.3,0.3)
+
+all_data=np.concatenate([data1,data2,data3,data4],1)
+
+def sigmoid(x):
+  result=1/(1+np.exp(-x))
+  return result 
+
+def cross_entropy_error(w,x,y):
+  N=np.size(y)
+  s=w.dot(x)
+  error=np.sum(-np.log(sigmoid(y*w.dot(x))))/N
+  return error
+
+#GD實作
+x=all_data[0:3,:]
+N=np.sum(mock_data_number_list)
+lr=0.1
+
+count=0
+for group_number in mock_data_number_list:
+  count=count+group_number
+  y=-np.ones(N)
+  y[count-group_number:count]=1
+  err_difference=10
+  while_count=0
+  ###w初始化
+  w=np.zeros([1,3])
+  ###GD 實作
+  ###這邊寫一個當收斂就結束演算法的迴圈
+  while err_difference>0.00001:
+    ###其中sigmoid(-y*w.dot(x))可理解成是對(-y*x)的線性加權
+    gd=np.sum(sigmoid(-y*w.dot(x))*(-y*x),1)/N
+    w=w-lr*gd
+    if while_count==0:
+      while_count=while_count+1
+    else:
+      err_difference=err-cross_entropy_error(w,x,y)
+    err=cross_entropy_error(w,x,y)
+  print('err',cross_entropy_error(w,x,y))
+  print('w',w)
+  score=sigmoid(w.dot(x)).reshape(N,1)
+  #print(sigmoid(w.dot(x)))
+  ###算完就把W換算劃線
+  w=w.flatten()
+  plt_x=np.linspace(0.1,0.9,N)
+  plt.plot(plt_x,-w[1]/w[2]*plt_x-w[0]/w[2])
+  if count==mock_data_number_list[0]:
+    score_array=score
+  else:
+    score_array=np.concatenate([score_array,score],1)
+#print(score_array)
+max_list=np.argmax(score_array,axis=1).reshape(N,1)
+print(np.concatenate([max_list,real_label.reshape(N,1)],1))
+```
+
+然而這個演算法有一個缺陷就是當DATA數相較其他不足的時候容易被挖過去
+**DATA不平衡的時候，預測會不準**
+```
+mock_data_number_list=[10,30,30,30]
+```
+
+```
+[[3. 0.]
+ [0. 0.]
+ [3. 0.]
+ [1. 0.]
+ [0. 0.]
+ [1. 0.]
+ [1. 0.]
+ [3. 0.]
+ [1. 0.]
+ [1. 0.]
+ [1. 1.]
+ [1. 1.]
+......
+
+```
