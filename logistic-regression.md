@@ -1,7 +1,7 @@
 # 邏輯回歸 logistic-regression
 先前可以回顧PLA跟linear regression，我們都是對分類問題做線性的優化，在這個條目會有非線性的優化
 
-我們可以藉由簡單的數值求解來找到極值，我們會在這個條目實作logistic-regression實作二分類問題跟多分類問題(OVO跟OVA演算法)
+我們可以藉由簡單的數值求解來找到極值，我會在這個條目實作logistic-regression實作二分類問題跟多分類問題(OVO跟OVA演算法)
 
 https://github.com/fluttering13/Machine-learning-base/blob/main/PLA-zh.md
 
