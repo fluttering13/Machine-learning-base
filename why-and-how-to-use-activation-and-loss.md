@@ -27,7 +27,9 @@
 $$I\left( x \right) = -{\log _2}p\left( x \right)$$
 因為我們會希望兩個獨立事件 $x_1$ 跟 $x_2$ 所定義的一起發生的訊息量是可以被相加，而且可以很直觀的連結到兩個獨立事件機率的相乘
 $$I\left( {{x_1}} \right) + I\left( {{x_2}} \right) = {\log _2}{p_1}\left( {{x_1}} \right){p_2}\left( {{x_2}} \right)$$
-當我們取log的時候，也相當於我們在對事件，對事情的可能性做編碼。在熱力學內，我們想要衡量這個系統有多平衡，或者多秩序，我們就在乘上個波茲曼常數
+當我們取log的時候，也相當於我們在對事件，對事情的可能性做編碼。
+
+在熱力學內，我們想要衡量這個系統有多平衡，或者多秩序，我們就在乘上個波茲曼常數
 
 $$S = {k_{\rm{B}}}\ln P$$
 
@@ -41,8 +43,18 @@ Shannon Entropy就是對self-information的期望值
 $$H\left( p \right) = E[I\left( p \right)] = \sum\limits_i {{p_i}{{\log }_2}{p_i}} $$
 
 舉例來說，我今天來擲三個銅板，我來算一下出現正的時候的資訊量有多少
+
 $$ - \left( {{1 \over 2}{{\log }_2}{1 \over 2} + {1 \over 4}{{\log }_2}{1 \over 4} + {1 \over 8}{{\log }_2}{1 \over 8}} \right) = {3 \over 2}$$
+
 也就是說，平均我需要1.5個bits，我就可以傳達出三個銅板出現正的資訊
+
+我們現在回過頭來看Shannon Entropy，改取個自然對數方便等等作分析(正統推導要用Lagrange Multiplier，這邊只是簡單感受一下)
+$$H =  - \sum\limits_i {{p_i}\ln {p_i}} $$
+$${{dH} \over {d{p_i}}} = \sum\limits_i {\ln {p_i} + } \sum\limits_i 1  = 0$$
+$$N + \log \left( {{p_1}...{p_n}} \right) = 0$$
+從這邊我們可以簡單的看到有一個可能性是Shannon Entropy有最大極值的時候，就是當這些p是常數，也就是uniform distribution
+
+換句話說就是當Shannon Entropy最大的時候，就是系統變成最均勻的時候，也就是最無聊，死氣沉沉的時候。
 
 
 
