@@ -68,9 +68,9 @@ $${H_{q,p}}\left[ { - \ln q\left( x \right)} \right] = -\sum\limits_i {{p_i}\ln 
 稍微提一下，Shannon Entropy一定是任何其他衡量資訊的下界
 $${H_{q,p}}\left[ { - \ln q\left( x \right)} \right] \ge {E_q}\left[ { - \ln q\left( x \right)} \right]$$
 
-也就是說，直到 $q_i$ 成為 $p_i$，${H_{q,p}}=H_p$，這個時候就會有最小的Cross entropy
+也就是說，直到 $q_i$ 成為 $p_i$ ， ${H_{q,p}}=H_p$，這個時候就會有最小的Cross entropy
 
-用Cross entropy還有一個特性，就是qp是可以交換的，也就是說編碼 $q_i$ 後再參考 $p_i$ 跟 編碼 $p_i$ 再參考 $q_i$ 是等價的
+用Cross entropy還有一個特性，就是 $q,p$ 是可以彼此交換的，也就是說編碼 $q_i$ 後再參考 $p_i$ 跟 編碼 $p_i$ 再參考 $q_i$ 是等價的
 
 概念上可以把這樣的差距當成是一種距離。
 
@@ -78,9 +78,9 @@ $${H_{q,p}}\left[ { - \ln q\left( x \right)} \right] \ge {E_q}\left[ { - \ln q\l
 剛剛我們提到了我們可以運用參照的手段來衡量兩個系統之間的差距，那能不能有更直接的方式，就是直接用減的
 $$H\left( {q|p} \right) = {E_p}\left[ {\ln q\left( x \right) - \ln p\left( x \right)} \right]$$
 
-在這裡可以看作 以$p_i$ 目標分佈為基準，$q_i$是模型的分佈，試圖去訓練$q_i$成為$p_i$
+在這裡可以看作以 $p_i$ 目標分佈為基準， $q_i$ 是模型的分佈，試圖去訓練 $q_i$ 成為 $p_i$
 
-所有實務上有一點要注意的是，$H\left( {q|p} \right)$ 跟 $H\left( {p|q} \right)$ 是不同的，q跟p搞錯，意思會完全不同，所以在這裡我們會說這個差距是一種對比 (contrast)
+所有實務上有一點要注意的是， $H\left( {p|q} \right)$ 跟 $H\left( {q|p} \right)$ 是不同的，q跟p搞錯，意思會完全不同，所以在這裡我們會說這個差距是一種對比 (contrast)
 
 再來KL Divergence也可以寫成這樣
 $$H\left( {q,p} \right) - H\left( p \right)$$
@@ -89,15 +89,19 @@ $$H\left( {q,p} \right) - H\left( p \right)$$
 
 ## f-divergence
 上述介紹了很多種衡量的方式，我們來寫一下更general的版本
-$${D_f}\left( {q|p} \right) = {E_p}\left[ {f\left( {{{q\left( x \right)} \over {p\left( x \right)}}} \right)} \right]\;s.t\;f\left( 1 \right) = 0,\quad f \qquad is \qquad convex$$
 
-令${q \over p} = u$ 當 $f\left( u \right) = u\ln u$ 就是KL divergence啦
-$$ - \sum\limits_i {{p_i}{{{q_i}} \over {{p_i}}}\ln {{{q_i}} \over {{p_i}}}} $$
+$${D_f}\left( {q|p} \right) = {E_p}\left[ {f\left( {{{q\left( x \right)} \over {p\left( x \right)}}} \right)} \right] \qquad s.t \qquad f\left( 1 \right) = 0,\quad f \qquad is \qquad convex$$
+
+令 ${q/p} = u$ 當 $f\left( u \right) = u\ln u$ 就是KL divergence啦
+
+$$ - \sum\limits_i {{p_i}{{{q_i}} \over {{p_i}}}\left( { - \ln {{{q_i}} \over {{p_i}}}} \right)}  = \sum\limits_i {{p_i}\ln {{{p_i}} \over {{q_i}}}}  = H\left( {p|q} \right)$$
 
 當 $f\left( u \right) = -\ln u$ 就是反過來的KL divergence
-$$ - \sum\limits_i {{p_i}\left( { - \ln {{{q_i}} \over {{p_i}}}} \right)}  = \sum\limits_i {{p_i}\ln {{{p_i}} \over {{q_i}}}}  = H\left( {p|q} \right)$$
 
-如果是 ${\left( {u - 1} \right)^2}$ 就叫做 $\Chi$ Square Divergence，比較像是KL的開方版本
+$$ - \sum\limits_i {{p_i}\left( { - \ln {{{q_i}} \over {{p_i}}}} \right)}  = \sum\limits_i {{p_i}\ln {{{q_i}} \over {{p_i}}}}  = H\left( {q|p} \right)$$
+
+如果是 ${\left( {u - 1} \right)^2}$ 就叫做 $\chi$ Square Divergence，比較像是KL的開方版本
+
 $$ - {\sum\limits_i {{p_i}\left( {{{{q_i}} \over {{p_i}}} - 1} \right)} ^2} =  - \sum\limits_i {{{{{\left( {{q_i} - {p_i}} \right)}^2}} \over {{p_i}}}} $$
 
 如果是 $f\left( u \right) =  - \left( {u + 1} \right)\ln {{u + 1} \over 2} + u\ln u$ 叫做Jensen–Shannon divergence
