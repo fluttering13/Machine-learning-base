@@ -35,7 +35,7 @@ $${\theta _{LMLE}} =  - \arg {\min _\theta }\sum\limits_i {{1 \over N}\ln p\left
 所以我們就可以寫成期望值，**只是全部條件機率的權重都是相同的**，在這邊就可以當作是CROSS ENTROPY的定義
 $${\theta _{LMLE}} =  - \arg {\min _\theta }E\left( {\ln p\left( {{y_i}|{x_i},\theta ,m} \right)} \right) = \arg {\min _\theta }H\left( {p,q} \right)$$
 
-這邊是我們做最大概似估計最重要的asummption，假如這個世界就是穩定運轉，那我們從母群體抽樣的過程也是穩定的
+這邊是我們做最大概似估計最重要的asummption，假如這個世界就是穩定運轉，那我們從母群體抽樣參數 $\theta$ 的過程也是穩定的
 
 ### Bernoulli distribution
 我們舉簡單的二元性分佈為例子，連續投擲硬幣的結果為正面 $N_ +$ 與 反面 $N_-$ 的次數，所給出的機率分佈為
@@ -55,3 +55,63 @@ $$f\left( {D|x} \right) = {1 \over {\sqrt {2\pi {\sigma ^2}} }}\exp \left( { - {
 $${{df} \over {d\theta }} = 0 \Rightarrow {\theta _{M{\rm{LE}}}}{\rm{ = }}\mu $$
 
 ## 最大後驗估計 Maximum A Posterior (MAP)
+在前面MLE提到了，所有從母群體抽樣參數 $\theta$ 都是相同的，
+
+
+但仔細想想這個應該是還蠻奇怪的一件事情，極端狀況的參數 $\theta_e$ 跟普通狀況下的參數 $\theta_n$ 應該是不同的。
+
+在實際分類問題或是運用機器學習可能會遇到一個問題就是，當模型的參數越來越大的時候，預測的狀況反而不準的。這個名詞就叫作過擬合overfitting。
+
+感覺上就是你教一個小孩教太久，導致他無法很好的梳理與理解，知識，而在它上面發生衝突導致發瘋。
+
+這是因為模型增長參數，相對的也會引進complexity造成的noise。
+
+換句話說，就是當模型增長之後，允許更多的function 或是 probility distribution可以對應到同一個要預測的data
+
+因為我們無法做到以下的事情
+
+1. 我們無法做到無窮取樣，完美的詮釋data
+
+2. 我們可能對於構成data的條件一無所知
+
+也就是說，我們要想辦法去作出限制，並給出參數的權重呢？
+
+在這裡我們運用到貝式學派的精神，詳見Bayes詮釋
+https://github.com/fluttering13/Causal-models/blob/main/Introduction-Zh.md
+
+**也就是我們去假設一下參數的分佈，給出這些參數的限制**
+
+我們習以為之的normal distribution, Lorenz distribution, Bolzman distribution，當我說們它是特定distribution的時候
+
+其實就已經把先驗的概念，過往經驗發生了甚麼，給考慮了進去
+
+我們重寫一下條件機率，利用鍊式法則可以整理一下，在這裡可以看到不同版本的貝氏公式
+$$p\left( {\theta |D,m} \right) = {{p\left( {D,m|\theta } \right)p\left( \theta  \right)} \over {p\left( {D,m} \right)}} = {{p\left( {D|m,\theta } \right)p\left( {m|\theta } \right)p\left( \theta  \right)} \over {p\left( {D|m} \right)p\left( m \right)}} = {{p\left( {D|m,\theta } \right)} \over {p\left( {D|m} \right)}}p\left( {\theta |m} \right)$$
+
+1. ${p\left( {D|m,\theta } \right)}$ 就是前面說的likehood
+2. $p\left( {\theta |m} \right)$ 稱作先驗機率，也就是我們透過以往的經驗，或者是觀察而得到的機率
+3. 左式的　$p\left( {\theta |D,m} \right)$　就是後驗機率，經由先驗機率，和其他的觀察所結合後更新得到的新的機率
+
+所以我們要對後驗機率找到最佳的參數，
+$${\theta _{MAP}} = \arg {\max _\theta }p\left( {\theta |D,m} \right) = \arg {\max _\theta }{{p\left( {D|m,\theta } \right)} \over {p\left( {D|m} \right)}}p\left( {\theta |m} \right)$$
+老樣子取個log
+$${\theta _{MAP}} = \ln \sum\limits_i {p\left( {{y_i}|{x_i},m,\theta } \right) + } \ln p\left( {\theta |m} \right) - \sum\limits_i {\ln p\left( {{y_i}|{x_i},m} \right)} $$
+超參數應該跟最後找到最好的參數是無相關的獨立事件，所以刪掉 $\sum\limits_i {\ln p\left( {{y_i}|{x_i},m} \right)} $ 。換句話說就是怎麼拍照，你都不會影響到真實物體的美麗。
+$${\theta _{MAP}} = \ln \sum\limits_i {p\left( {{y_i}|{x_i},m,\theta } \right) + } \ln p\left( {\theta |m} \right)$$
+跟MAE相比就只是多了一項修正項，在機器學習裡面這叫作Regularization
+
+### uniform distribution
+$$\ln p\left( {\theta |m} \right)=c$$
+差一個常數在微分的時候就會被微掉了，就會回到MAE的例子
+
+### Normal distribution
+$$p\left( {\theta |m} \right) = {1 \over {\sqrt {2\pi {\sigma ^2}} }}\exp \left( { - {{\left( {\theta  - \mu } \right)}^2}/{{\left( {2\sigma } \right)}^2}} \right)$$
+MAE寫一下
+$${\theta _{MAP}} = \ln \sum\limits_i {p\left( {{y_i}|{x_i},m,\theta } \right) + } {1 \over {2{\sigma ^2}}}{\theta ^2}$$
+新增的修正項有一個新的名字，它就叫作L2 Regularization，所以它**有用到Normal distribution的假設**
+
+### Laplace distribution
+$$p\left( {\theta |m} \right) = {1 \over {2b}}\exp \left( { - \left| \theta  \right|/b} \right)$$
+MAE寫一下
+$${\theta _{MAP}} = \ln \sum\limits_i {p\left( {{y_i}|{x_i},m,\theta } \right)}  - \left| \theta  \right|/b$$
+新增的修正項有一個新的名字，它就叫作L1 Regularization，所以它**有用到Laplace distribution的假設**
