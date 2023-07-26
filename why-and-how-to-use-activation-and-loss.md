@@ -7,108 +7,51 @@
 
 在這個條目裡面，我最終會來談談那些我們常見的激勵函數或誤差函數他們是怎麼被定義出來的
 
-# 資訊(information)
-首先，先來定義一下甚麼叫做資訊
+誤差函數還可以詳見這篇
+https://github.com/fluttering13/Machine-learning-base/blob/main/information-and-entropy.md
 
-是我今天講了這句話有幾個字叫做資訊嗎？
+# 概似估計 (Likelihood function)
+Likelihood function的意思是估計統計模型中的參數的函數，
 
->>在非洲每過一個小時，就有3600秒不見了
+假如今天我有骰骰子的結果D，我今天想要去建構一個函數，由不同的角度或是高度 (parameter) $\theta$，藉由快門$m$去紀錄這些過程 ( $m$ 叫做hyper parameter與這些參數獨立無關，只是扮演更新算法的角色)
+$$p\left( {D|m,\theta } \right)$$
 
-那如果我今天說的這些話都是廢話，那可以叫作資訊嗎？
+## 最大概似估計 (Maximum Likelihood Estimation)
+以下介紹一下常見使用的概念，最大概似估計 (Maximum Likelihood Estimation)，它跟上面那篇文章內的推導非常的像，只是加入了一些哲學思考
 
->>在非洲每過一個小時，就有一對黑人夫婦產下了一個白人嬰孩
+以預測一個骰子出來的面來舉例，我就需要讓這個函數盡量的逼近我真實的資料 $D$
 
-像上面的資訊量好像就多了一些
+由不同的角度或是高度 $\theta$ 我可以組出一組輸入的資料 $x_i$，輸出資料標記為 $y_i$
 
-**資訊的定義就是我們對於一個系統的可能性，或是無知做衡量**
+這個過程我們叫作 最大概似估計 (Maximum Likelihood Estimation)
 
-## self-information
-簡單的定義是我們對事件發生的機率取log，會取負號是因為機率都小於1
-$$I\left( x \right) = -{\log _2}p\left( x \right)$$
-因為我們會希望兩個獨立事件 $x_1$ 跟 $x_2$ 所定義的一起發生的訊息量是可以被相加，而且可以很直觀的連結到兩個獨立事件機率的相乘
-$$I\left( {{x_1}} \right) + I\left( {{x_2}} \right) = {\log _2}{p_1}\left( {{x_1}} \right){p_2}\left( {{x_2}} \right)$$
-當我們取log的時候，也相當於我們在對事件，對事情的可能性做編碼。
+最佳化的參數可以寫成，意味者我們想找到最大參數化的那組參數
+$${\theta _{MLE}} = {1 \over N}\arg {\max _\theta }\sum\limits_i {p\left( {{y_i}|{x_i},\theta ,m} \right)} $$
 
-在熱力學內，我們想要衡量這個系統有多平衡，或者多秩序，我們就在乘上個波茲曼常數
+我們來對這些機率分佈編碼一下，同時也方便加總，也就是取log
 
-$$S = {k_{\rm{B}}}\ln P$$
+$${\theta _{LMLE}} =  - \arg {\min _\theta }\sum\limits_i {{1 \over N}\ln p\left( {{y_i}|{x_i},\theta ,m} \right)} $$
 
-但都是同一個意思，我們對於這個系統有多無知，需要花費多少的力氣才能夠了解它
-## Shannon Entropy
-Shannon是一個在二戰時期有名的密碼學家，建構起基礎的資訊理論，並說明資訊基礎理論能夠應用於自然語言和計算機語言，做出了巨大的貢獻
+所以我們就可以寫成期望值，**只是全部條件機率的權重都是相同的**，在這邊就可以當作是CROSS ENTROPY的定義
+$${\theta _{LMLE}} =  - \arg {\min _\theta }E\left( {\ln p\left( {{y_i}|{x_i},\theta ,m} \right)} \right) = \arg {\min _\theta }H\left( {p,q} \right)$$
 
-人家的碩士論文就是現在教科書常見的布林代數應用於電子領域，是有跨時代的價值，在21歲就展現了才華
+這邊是我們做最大概似估計最重要的asummption，假如這個世界就是穩定運轉，那我們從母群體抽樣的過程也是穩定的
 
-Shannon Entropy就是對self-information的期望值，也就是要達成這個平均上來說，系統最低的要求是多少
+### Bernoulli distribution
+我們舉簡單的二元性分佈為例子，連續投擲硬幣的結果為正面 $N_ +$ 與 反面 $N_-$ 的次數，所給出的機率分佈為
 
-$$H\left( p \right) = E[I\left( p \right)] = \sum\limits_i {{p_i}{{\log }_2}{p_i}} $$
+$$f\left( {\theta ,{N_ + },{N_ - }} \right) = {\theta ^{{N_ + }}}{\left( {1 - \theta } \right)^{{N_ - }}}$$
 
-舉例來說，我今天來擲三個銅板，我來算一下出現正的時候的資訊量有多少
+它的最大概似估計地方在
 
-$$ - \left( {{1 \over 2}{{\log }_2}{1 \over 2} + {1 \over 4}{{\log }_2}{1 \over 4} + {1 \over 8}{{\log }_2}{1 \over 8}} \right) = {3 \over 2}$$
+$${{df} \over {d\theta }} = 0 \Rightarrow \theta_{MLE}={N_+ \over (N_+ + N_-)}$$
 
-也就是說，平均我需要1.5個bits，我就可以傳達出三個銅板出現正的資訊
+所以直覺上我們對二元性分類問題，例如說三個正面與兩個反面出現最大的概率，就是在正面所佔的比重，也就是0.6的地方，很符合直覺
 
-我們現在回過頭來看Shannon Entropy，改取個自然對數方便等等作分析(正統推導要用Lagrange Multiplier，這邊只是簡單感受一下)
-$$H =  - \sum\limits_i {{p_i}\ln {p_i}} $$
-$${{dH} \over {d{p_i}}} = \sum\limits_i {\ln {p_i} + } \sum\limits_i 1  = 0$$
-$$N + \log \left( {{p_1}...{p_n}} \right) = 0$$
-從這邊我們可以簡單的看到有一個可能性是Shannon Entropy有最大極值的時候，就是當這些p是常數，也就是uniform distribution
+### Normal distribution
+那常見的正態分佈呢？
+$$f\left( {D|x} \right) = {1 \over {\sqrt {2\pi {\sigma ^2}} }}\exp \left( { - {{\left( {x - \mu } \right)}^2}/{{\left( {2\sigma } \right)}^2}} \right)$$
+微分一下就會發現，就是很直觀的在平均數上
+$${{df} \over {d\theta }} = 0 \Rightarrow {\theta _{M{\rm{LE}}}}{\rm{ = }}\mu $$
 
-換句話說就是當Shannon Entropy最大的時候，就是系統變成最均勻的時候，也就是最無聊，死氣沉沉的時候。
-
-## Cross entropy
-既然我們有了衡量資訊的手段了，那麼我去衡量更多的系統的時候，例如說兩個set內有個別事件發生的機率: $p_i$ 跟 $q_i$ 我們要怎麼去衡量他們的差別呢？
-$${H_{q,p}}\left[ { - \ln q\left( x \right)} \right] = -\sum\limits_i {{p_i}\ln {q_i}} $$
-
-第一個概念，我們要介紹的是參照的想法
-
-已實務上來說 $p_i$ 是目標分佈，而 $q_i$是模型的分佈，套入前面編碼的概念，我們今天把 $q_i$ 編碼後再參考 $p_i$ 作為加權
-
-稍微提一下，Shannon Entropy一定是任何其他衡量資訊的下界
-$${H_{q,p}}\left[ { - \ln q\left( x \right)} \right] \ge {E_q}\left[ { - \ln q\left( x \right)} \right]$$
-
-也就是說，直到 $q_i$ 成為 $p_i$ ， ${H_{q,p}}=H_p$，這個時候就會有最小的Cross entropy
-
-用Cross entropy還有一個特性，就是 $q,p$ 是可以彼此交換的，也就是說編碼 $q_i$ 後再參考 $p_i$ 跟 編碼 $p_i$ 再參考 $q_i$ 是等價的
-
-概念上可以把這樣的差距當成是一種距離。
-
-## Kullback-Leibler Divergence
-剛剛我們提到了我們可以運用參照的手段來衡量兩個系統之間的差距，那能不能有更直接的方式，就是直接用減的
-$$H\left( {q|p} \right) = {E_p}\left[ {\ln q\left( x \right) - \ln p\left( x \right)} \right]$$
-
-在這裡可以看作以 $p_i$ 目標分佈為基準， $q_i$ 是模型的分佈，試圖去訓練 $q_i$ 成為 $p_i$
-
-所有實務上有一點要注意的是， $H\left( {p|q} \right)$ 跟 $H\left( {q|p} \right)$ 是不同的，q跟p搞錯，意思會完全不同，所以在這裡我們會說這個差距是一種對比 (contrast)
-
-再來KL Divergence也可以寫成這樣
-$$H\left( {q,p} \right) - H\left( p \right)$$
-
-就是Cross entropy跟Shannon Entropy的差距，所以這裡又串起來了！
-
-## f-divergence
-上述介紹了很多種衡量的方式，我們來寫一下更general的版本
-
-$${D_f}\left( {q|p} \right) = {E_p}\left[ {f\left( {{{q\left( x \right)} \over {p\left( x \right)}}} \right)} \right] \qquad s.t \qquad f\left( 1 \right) = 0,\quad f \qquad is \qquad convex$$
-
-令 ${q/p} = u$ 當 $f\left( u \right) = u\ln u$ 就是KL divergence啦
-
-$$ - \sum\limits_i {{p_i}{{{q_i}} \over {{p_i}}}\left( { - \ln {{{q_i}} \over {{p_i}}}} \right)}  = \sum\limits_i {{p_i}\ln {{{p_i}} \over {{q_i}}}}  = H\left( {p|q} \right)$$
-
-當 $f\left( u \right) = -\ln u$ 就是反過來的KL divergence
-
-$$ - \sum\limits_i {{p_i}\left( { - \ln {{{q_i}} \over {{p_i}}}} \right)}  = \sum\limits_i {{p_i}\ln {{{q_i}} \over {{p_i}}}}  = H\left( {q|p} \right)$$
-
-如果是 ${\left( {u - 1} \right)^2}$ 就叫做 $\chi$ Square Divergence，比較像是KL的開方版本
-
-$$ - {\sum\limits_i {{p_i}\left( {{{{q_i}} \over {{p_i}}} - 1} \right)} ^2} =  - \sum\limits_i {{{{{\left( {{q_i} - {p_i}} \right)}^2}} \over {{p_i}}}} $$
-
-如果是 $f\left( u \right) =  - \left( {u + 1} \right)\ln {{u + 1} \over 2} + u\ln u$ 叫做Jensen–Shannon divergence
-
-開個坑，以後再介紹它
-
-
-
-
-
+## 最大後驗估計 Maximum A Posterior (MAP)
