@@ -10,7 +10,14 @@
 誤差函數還可以詳見這篇
 https://github.com/fluttering13/Machine-learning-base/blob/main/information-and-entropy.md
 
-# 概似估計 (Likelihood function)
+# 正規化 (Regularization)
+我們時常在做的任務就是老師去教學生，
+
+要如何的去教：在這個條目，我們會先介紹 最大概似估計 (Maximum Likelihood Estimation) 我們想要去學習的目標是甚麼要怎麼定義下來
+
+學壞了怎麼辦：再來是如何用運用貝式理論去做後驗機率的修正，我們稱之為正規化
+
+## 概似估計 (Likelihood function)
 Likelihood function的意思是估計統計模型中的參數的函數，
 
 假如今天我有骰骰子的結果D，我今天想要去建構一個函數，由不同的角度或是高度 (parameter) $\theta$，藉由快門$m$去紀錄這些過程 ( $m$ 叫做hyper parameter與這些參數獨立無關，只是扮演更新算法的角色)
