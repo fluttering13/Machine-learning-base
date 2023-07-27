@@ -103,6 +103,9 @@ $$
 這又叫作反向參數映射 Inverse parameter mapping
 
 # 激勵函數的懶人包
+這邊根據wiki整理了一下
+https://en.wikipedia.org/wiki/Exponential_family
+
 二元分類用sigmoid
 
 多元分類用softmax
@@ -111,17 +114,23 @@ $$
 
 常態分布(normal distribution) 可以用剛剛導過的
 
-$$\left[ \matrix{
-   - {{{\eta _1}} \over {2{\eta _2}}} \hfill \cr 
-   - {1 \over {2{\eta _2}}} + {{{\eta _1}^2} \over {4{\eta _2}^2}} \hfill \cr}  \right]$$
+$$
+\left[\begin{array}{l}
+-\frac{\eta_1}{2 \eta_2} \\
+-\frac{1}{2 \eta_2}+\frac{\eta_1^2}{4 \eta_2^2}
+\end{array}\right]
+$$
 
 可靠性分析和壽命檢驗 (Weibull distribution) 用 ${\left( { - \eta } \right)^{ - {1 \over k}}}$  
-k=1，它是指數分布； k=2時，是Rayleigh distribution(k也可以當作參數喔喔喔)
+k=1，它是指數分布； k=2時，是Rayleigh distribution (k也可以當作參數喔喔喔)
 
 布朗運動可以用 $-1 \over \eta$
+
+## 這邊應該沒什麼差
+
 
 以下是就算你沒用function應該也沒差，什麼都不加的泛用性其實也很高
 
 社會上的財富分配(Pareto distribution) 用 $-1- \eta$，但就是差個常數應該沒差
 
-chi-squared distribution 用 $2\eta+2$
+(chi-squared distribution) 用 $2\eta+2$
