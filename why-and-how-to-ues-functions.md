@@ -114,12 +114,10 @@ https://en.wikipedia.org/wiki/Exponential_family
 
 常態分布(normal distribution) 可以用剛剛導過的
 
-$$
-\left[\begin{array}{l}
+$$\left[\begin{array}{l}
 -\frac{\eta_1}{2 \eta_2} \\
 -\frac{1}{2 \eta_2}+\frac{\eta_1^2}{4 \eta_2^2}
-\end{array}\right]
-$$
+\end{array}\right]$$
 
 可靠性分析和壽命檢驗 (Weibull distribution) 用 ${\left( { - \eta } \right)^{ - {1 \over k}}}$  
 k=1，它是指數分布； k=2時，是Rayleigh distribution (k也可以當作參數喔喔喔)
