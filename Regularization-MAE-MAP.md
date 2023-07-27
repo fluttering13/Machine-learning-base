@@ -92,7 +92,7 @@ $$p\left( {\theta |D,m} \right) = {{p\left( {D,m|\theta } \right)p\left( \theta 
 $${\theta _{MAP}} = \arg {\max _\theta }p\left( {\theta |D,m} \right) = \arg {\max _\theta }{{p\left( {D|m,\theta } \right)} \over {p\left( {D|m} \right)}}p\left( {\theta |m} \right)$$
 老樣子取個log
 $${\theta _{MAP}} = \ln \sum\limits_i {p\left( {{y_i}|{x_i},m,\theta } \right) + } \ln p\left( {\theta |m} \right) - \sum\limits_i {\ln p\left( {{y_i}|{x_i},m} \right)} $$
-超參數應該跟最後找到最好的參數是無相關的獨立事件，所以刪掉 $\sum\limits_i {\ln p\left( {{y_i}|{x_i},m} \right)} $ 。換句話說就是怎麼拍照，你都不會影響到真實物體的美麗。
+超參數應該跟最後找到最好的參數是無相關的獨立事件，所以刪掉最後一項 $\sum\limits_i {\ln p\left( {{y_i}|{x_i},m} \right)}$ 。換句話說就是怎麼拍照，你都不會影響到真實物體的美麗。
 $${\theta _{MAP}} = \ln \sum\limits_i {p\left( {{y_i}|{x_i},m,\theta } \right) + } \ln p\left( {\theta |m} \right)$$
 跟MAE相比就只是多了一項修正項，在機器學習裡面這叫作Regularization
 
