@@ -29,6 +29,7 @@ https://github.com/fluttering13/Machine-learning-base/blob/main/Regularization.m
 
 那有沒有一個方式可以系統化的告訴我這些分布的故事呢？
 
+(如果懶得看數學過程可以直接跳到最後面的懶人包)
 
 
 ## 指數族分布(Exponential Family)
@@ -156,23 +157,32 @@ $$
 這邊根據wiki整理了一下
 https://en.wikipedia.org/wiki/Exponential_family
 
-二元分類用sigmoid
+## Bernoulli Distribution
+二元分類用
 
-多元分類用softmax
+sigmoid
+## Categorical Distribution 
+多元分類用
 
-短時間的隨機事件(Poisson distribution) 用 ${e^\eta }$
-
-常態分布(normal distribution) 可以用剛剛導過的
+softmax
+## Poisson distribution
+短時間的隨機事件 用 ${e^\eta }$
+## normal distribution
+常態分布 可以用剛剛導過的
 
 $$\left[\begin{array}{l}
 -\frac{\eta_1}{2 \eta_2} \\
 -\frac{1}{2 \eta_2}+\frac{\eta_1^2}{4 \eta_2^2}
 \end{array}\right]$$
 
-可靠性分析和壽命檢驗 (Weibull distribution) 用 ${\left( { - \eta } \right)^{ - {1 \over k}}}$  
+## Weibull distribution
+可靠性分析和壽命檢驗 用 ${\left( { - \eta } \right)^{ - {1 \over k}}}$  
+
 k=1，它是指數分布； k=2時，是Rayleigh distribution (k也可以當作參數喔喔喔)
 
-布朗運動可以用 $-1 \over \eta$
+## Laplace distribution
+
+布朗運動或是一些隨機過程可以用 $-1 \over \eta$
 
 ## 這邊應該沒什麼差
 
