@@ -29,8 +29,16 @@ https://github.com/fluttering13/Machine-learning-base/blob/main/Regularization.m
 
 那有沒有一個方式可以系統化的告訴我這些分布的故事呢？
 
+
+
 ## 指數族分布(Exponential Family)
 如其名，這是一個包山包海，可以涵蓋我們上述的那些分布們，這邊我們把它當作一套系統來幫助我們得到想要的資訊
+
+具體的目標是如果我今天知道這些參數了，又告訴你分布是什麼，那能不能反推回去說平均是什麼？變異數是什麼？
+
+這又叫作反向參數映射 Inverse parameter mapping
+
+接下來我們來介紹怎麼有系統的去做這件事情
 $$p\left( {y|\eta } \right) = h\left( y \right)\exp \left( {{\eta ^T}T\left( y \right) - A\left( \eta  \right)} \right)$$
 
 1. $\eta$ 就是那些雜七雜八的參數 (Natural Parameters)
@@ -96,12 +104,54 @@ $$
 
 它告訴我們，要擬合一個Normal Distribution需要兩個統計量，如果有學過動差(momentum)，就是那個用來檢測兩個隨機變數的東東，這邊對應到的分別是一階動差跟二階動差
 
-如果我今天知道這些參數了，又告訴你分布是什麼，那能不能反推回去說平均是什麼？變異數是什麼？
-
 在機器學習裡面常常使用一些特殊的函數，會選用這些函數其實都來自於，我們心中可能有某個分布，我今天只是把這些參數去map到這些分布的平均上面
 
-這又叫作反向參數映射 Inverse parameter mapping
+### Bernoulli分布 (Bernoulli Distribution)
+在看看這個例子，會更簡單一些
+$$p\left( {{y_i}|{x_i},m,\theta } \right) = {\pi ^{{y_i}}}{\left( {1 - \pi } \right)^{1 - {y_i}}}$$
 
+在把這些對應的函數寫下來
+
+$$h\left( y \right) = 1$$
+
+$$\eta  = \ln \left( {{\pi  \over {1 - \pi }}} \right)y + \ln \left( {1 - \pi } \right)$$
+
+$$T\left( y \right) = y$$
+
+$$A\left( \eta  \right) =  - \ln \left( {1 - \pi } \right) = \ln \left( {1 + {e^\eta }} \right)$$
+
+對配分函數做微分
+$${{\partial A\left( \eta  \right)} \over {\partial \eta }} = {1 \over {1 + {e^{ - \eta }}}}$$
+
+這邊就是大名鼎鼎的sigmoid了！
+
+### Categorical Distribution
+在來我們把binray的狀況推廣一下
+
+$$p(y\mid \pi ) = {{M!} \over {{y_1}!{y_2}! \cdots {y_K}!}}\pi _1^{{y_1}}\pi _2^{{y_2}} \cdots \pi _K^{{y_K}}$$
+
+這邊的配分函數找一下會發現是 $e^{\eta_k}$ 的總和
+
+
+$$A\left( {{\eta _1},{\eta _2}...{\eta _{k - 1}}} \right) =  - \ln \left[ \matrix{
+  {\pi _1} \hfill \cr 
+  ... \hfill \cr}  \right]$$
+
+從binary的結果那邊大概就可以知道答案長這樣，或是仔細找一下就發現
+
+$$=\ln \left[ \matrix{
+  \sum\limits_{k = 1}^K {{e^{{\eta _k}}}}  \hfill \cr 
+  ... \hfill \cr}  \right]$$
+
+最後微分完就是softmax啦！
+
+$$
+\frac{\partial A(\eta)}{\partial \eta}=\left[\begin{array}{l}
+e^{\eta_1} \\
+\ldots
+\end{array}\right] / \sum_{k=1}^K e^{\eta_k}
+$$
+  
 # 激勵函數的懶人包
 這邊根據wiki整理了一下
 https://en.wikipedia.org/wiki/Exponential_family
