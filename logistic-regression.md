@@ -24,7 +24,7 @@ $${1 \over {{e^{ - wx}} + 1}}$$
 
 至於這個函數是怎麼訂出來的，詳見
 
-https://github.com/fluttering13/Machine-learning-base/blob/main/why-and-how-to-use-activation-and-loss.md
+https://github.com/fluttering13/Machine-learning-base/blob/main/why-and-how-to-ues-functions.md
 
 激勵函數如果選擇sigmoid，那很自然的，我們就會使用cross-entropy作為誤差函數，來衡量標籤 $y$ 與模型預測 ${w^T}{x_n}$ 之間的對比(Contrasts)
 
