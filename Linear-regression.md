@@ -44,6 +44,7 @@ $${W_{lin}} = {\left( {{X^T}X} \right)^{ - 1}}{X^T}y$$
 
 或是在實作上，方差優化的過程也可能較其他函數比較漫長
 
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/lin1.png" width="500px"/></div>
 
 ```
 ###linear regression 實作
