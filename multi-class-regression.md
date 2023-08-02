@@ -25,6 +25,8 @@ A可以對BCD，B可以對ACD，C可以對ABD，D可以對ABC
 
 一個點就會拿到四個分數，我們取最大的那個當作是我們的分類
 
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/log2.png" width="500px"/></div>
+
 ```
 ###logistic regression OVA演算法實作
 ###我們來利用logistic實作多分類問題
@@ -120,6 +122,9 @@ print(np.concatenate([max_list,real_label.reshape(N,1)],1))
 
 然而這個演算法有一個缺陷就是當DATA數相較其他不足的時候容易被挖過去
 **DATA不平衡的時候，預測會不準**
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/log3.png" width="500px"/></div>
+
 ```
 mock_data_number_list=[10,30,30,30]
 ```
@@ -153,6 +158,8 @@ mock_data_number_list=[10,30,30,30]
 在經過六場比賽後，如果是A的累加積分最高，則該點被視為是A分類
 
 而這邊的累加積分是用投票機制，大於0.5就+1分，才能解決少分類點會被蓋過去的問題
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/log4.png" width="500px"/></div>
 
 ```
 ###logistic regression 實作
@@ -283,6 +290,8 @@ plt.ylim(0,1)
 
 在這邊可以使用softmax這個特殊函數來map到我們要分類到的那些標籤的機率
 
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/multi-1.png" width="500px"/></div>
+
 ```
 ###multi-class regression 實作
 
@@ -390,4 +399,7 @@ plt.legend(
     title_fontsize=10)
 ```
 
+其中，利用了$w$矩陣，去做參數化，第一列的 $w_1i$ 代表著對第一個one-hot向量的衡量
+
+**也就代表著對第一個分類所進行的衡量**，我們可以稍微看一下藍色的點跟藍色的線能不能很好的隔開去知道現在分類了怎麼樣
 
