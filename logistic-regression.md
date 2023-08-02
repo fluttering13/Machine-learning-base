@@ -41,6 +41,9 @@ $$\nabla {E_{ce}} = {1 \over N}\sum\limits_n^1 { - \ln \alpha \left( {{y_n}{w^T}
 $$w' = w - l\nabla {E_{ce}}\left( w \right)$$
 
 接著我們來實作一下
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/log1.png" width="500px"/></div>
+
 ```
 ##logistic regression 實作
 #首先我們需要一些模擬數據
