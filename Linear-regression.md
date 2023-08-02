@@ -34,9 +34,15 @@ $${W_{lin}} = {\left( {{X^T}X} \right)^{ - 1}}{X^T}y$$
 
 意思是說相對於0/1 error，你可能會花費比較多的資源，如樣本數去找到比較好的bound
 
-**但好處就是這是一個global的解，只要求個反矩陣就出來，當然如果遇到sigular value那就沒辦法**
+**但好處就是這是一個global的解，只要求個反矩陣就出來，當然如果遇到singular value那就沒辦法**
+
+ 如果關心singular value的問題也可以直接用梯度下降的方式進行數值求解，詳見
+
+ https://github.com/fluttering13/Machine-learning-base/blob/main/multi-class-regression.md
 
 壞處就是有時候方差不一定是最好的衡量 (因為方差不一定是量化"差距"概念最好的方式)
+
+或是在實作上，方差優化的過程也可能較其他函數比較漫長
 
 
 ```
