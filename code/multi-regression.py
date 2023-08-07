@@ -28,7 +28,7 @@ def data_generator(mock_data_number,r,x0,y0,label):
   ones=np.ones([1,mock_data_number])
   data1=np.array(sampling_circle(mock_data_number,r**2,x0,y0))
   label_array=label*np.ones([1,mock_data_number])
-  #plt.scatter(data1[0,:],data1[1,:])
+  plt.scatter(data1[0,:],data1[1,:])
   data1=np.concatenate([ones,data1],0)
   data1=np.concatenate([data1,label_array],0)
   return data1
@@ -37,7 +37,7 @@ data1=data_generator(mock_data_number_list[0],0.2,0.3,0.7,0)
 data2=data_generator(mock_data_number_list[1],0.2,0.7,0.7,1)
 data3=data_generator(mock_data_number_list[2],0.2,0.7,0.3,2)
 data4=data_generator(mock_data_number_list[3],0.2,0.3,0.3,3)
-
+plt.show()
 v_data1=data_generator(verify_data_number_list[0],0.2,0.3,0.7,0)
 v_data2=data_generator(verify_data_number_list[1],0.2,0.7,0.7,1)
 v_data3=data_generator(verify_data_number_list[2],0.2,0.7,0.3,2)
@@ -143,12 +143,12 @@ test_error_count=compare_two_array_count(answer_test,test_label)
 print('1/0 test error',test_error_count)
 ################################################################
 count=0
-for num in mock_data_number_list:
-  plot_x=all_data[1,count:count+num]
-  plot_y=new_x_list[2,count:count+num]
-  plt.scatter(plot_x,plot_y)
-  count=count+num
-plt.show()
+# for num in mock_data_number_list:
+#   plot_x=all_data[1,count:count+num]
+#   plot_y=new_x_list[2,count:count+num]
+#   plt.scatter(plot_x,plot_y)
+#   count=count+num
+
 ###畫這圖真是有夠麻煩，因為是多項式
 ###演篹法很簡單就是用篩的，接近的點就把它畫出來
 # plot_x=np.arange(-1,2,0.01)
