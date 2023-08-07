@@ -15,6 +15,8 @@ https://github.com/fluttering13/Machine-learning-base/blob/main/logistic-regress
 
 現在我們想要推廣到多分類問題
 
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/multi-0.png" width="500px"/></div>
+
 假如今天有A、B、C、D，四類標籤，前面我們用logistic處理二分類能得到一個機率，也可以把它當作一個分數
 
 1. 第一種處理方式叫做 One-versus-all decomposition：
