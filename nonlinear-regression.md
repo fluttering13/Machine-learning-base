@@ -12,7 +12,9 @@
 
 所以本質上我們還是做線性的事情，只是在另外一個空間裡面做，最後就還原回去就好。
 
-舉例來說，假如我今天有兩個feature $x_1$, $x_2$
+舉例來說，假如我今天有兩個feature $x_1$, $x_2$ 與四個分類
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/multi-0.png" width="500px"/></div>
 
 原本之前做的事情是我們想找到
 ${c_0} + {c_1}{x_1} + {c_2}{x_2} = 0$
@@ -22,6 +24,9 @@ ${c_0} + {c_1}{x_1} + {c_2}{x_2} = 0$
 ${c_0} + {c_1}{x_1}^2 + {c_2}{x_2}^2 + {c_3}{x_1}{x_2} = 0$
 
 我們用 $x_0$ 跟 $x_0$ $x_1$來做圖來稍微看一下
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/multi-poly-0.png" width="500px"/></div>
+
 ```
 ###這個code可以放在下面的那實作上面，只是專門畫這張圖而已
 count=0
@@ -40,6 +45,11 @@ plt.show()
 
 然後再轉回來原本我們看的空間 $\left( {{x_0},{x_1}} \right)$
 
+意思是今天我做分類前，我可以想多一點，考慮多一點的參數，這邊我們要做一個轉換 (transform)
+
+在這邊我們用到的是簡單的polynomial的轉換
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/multi-poly-1.png" width="500px"/></div>
 
 ```
 ###Nonlinear multi-class regression 實作
