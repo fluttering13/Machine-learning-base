@@ -12,7 +12,12 @@
 https://github.com/fluttering13/Machine-learning-base/blob/main/information-and-entropy.md
 
 如何正則化可以看這篇
-https://github.com/fluttering13/Machine-learning-base/blob/main/Regularization.md
+
+https://github.com/fluttering13/Machine-learning-base/blob/main/Regularization-MAE-MAP.md
+
+正則化的例子在這裡
+
+https://github.com/fluttering13/Machine-learning-base/blob/main/Regularization-example.md
 
 # 激勵函數 (Activation function)
 在機器學習中，我們時常為了符合標籤的性質
