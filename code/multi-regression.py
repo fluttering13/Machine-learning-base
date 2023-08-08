@@ -18,7 +18,7 @@ def sampling_circle(sample_size,r_sqaure,x_0,y_0):
     return x, y
 ###模擬數據數量
 mock_data_number_list=[50,50,50,50]
-verify_data_number_list=[5,5,5,5]
+verify_data_number_list=[50,50,50,50]
 ###種類
 k=np.size(mock_data_number_list)
 
@@ -28,7 +28,7 @@ def data_generator(mock_data_number,r,x0,y0,label):
   ones=np.ones([1,mock_data_number])
   data1=np.array(sampling_circle(mock_data_number,r**2,x0,y0))
   label_array=label*np.ones([1,mock_data_number])
-  plt.scatter(data1[0,:],data1[1,:])
+  #plt.scatter(data1[0,:],data1[1,:])
   data1=np.concatenate([ones,data1],0)
   data1=np.concatenate([data1,label_array],0)
   return data1
@@ -37,7 +37,7 @@ data1=data_generator(mock_data_number_list[0],0.2,0.3,0.7,0)
 data2=data_generator(mock_data_number_list[1],0.2,0.7,0.7,1)
 data3=data_generator(mock_data_number_list[2],0.2,0.7,0.3,2)
 data4=data_generator(mock_data_number_list[3],0.2,0.3,0.3,3)
-plt.show()
+
 v_data1=data_generator(verify_data_number_list[0],0.2,0.3,0.7,0)
 v_data2=data_generator(verify_data_number_list[1],0.2,0.7,0.7,1)
 v_data3=data_generator(verify_data_number_list[2],0.2,0.7,0.3,2)
@@ -58,11 +58,15 @@ def cross_entropy_error(w,x,y):
   return error
 
 def norm_2D_error(x,y):
-  return np.sum(np.power(x-y,2))
+  return np.sum(np.power(x-y,2))/(2*len(x))
 
 def one_hot(a,k):
   a=a.astype(int)
   return np.eye(k)[a]
+
+def kl_divergence(p, q):
+    return np.sum(np.where(p != 0, p * np.log(p / q), 0))
+
 
 def Optimzer_GD_2D_norm(lr,w,x_0,y_prime):
   start = time.time()
@@ -82,6 +86,29 @@ def Optimzer_GD_2D_norm(lr,w,x_0,y_prime):
   end= time.time()
   print('running_time',end-start)
   return w,y,error,error_his,count
+
+
+def Optimzer_momentum_2D_norm(lr,beta,w,x_0,y_prime):
+  start = time.time()
+  count=0
+  error_his=[]
+  error_diff=10
+  v=np.zeros(w.shape)
+  while error_diff>0.00001:
+    y=w.dot(x_0)
+    y=softmax(y,axis=0)
+    gradient=(y_prime-y).dot(x_0.T)
+    v=v*beta+lr*gradient
+    w=w+v
+    error=norm_2D_error(y,y_prime)
+    error_his.append(error)
+    count=count+1
+    if count>1:
+      error_diff=abs(error_his[-1]-error_his[-2])
+  end= time.time()
+  print('running_time',end-start)
+  return w,y,error,error_his,count
+
 
 
 
@@ -115,40 +142,54 @@ def new_poly_x_generator(all_data,m):
   new_x_list=np.array(new_x_list).T
   return new_x_list,order_list
 
-m=2
-new_x_list,order_list=new_poly_x_generator(all_data,m)
-test_x_list,order_list=new_poly_x_generator(test_data,m)
+error_2d_list=[]
+error_01_list=[]
+validation_01_list=[]
+for m in range(1,50):
 
-label_array_one_hot=one_hot(all_data[n+1,:],k).T
-w=np.random.normal(size=(k, len(order_list)+1))
-###簡簡單單的優化
-w,y,error,error_his,count=Optimzer_GD_2D_norm(0.01,w,new_x_list,label_array_one_hot)
-#print(w)
-#print('learning error',error)
-answer=np.int64(all_data[-1,:])
-answer_test=np.int64(test_data[-1,:])
-learn_label=np.argmax(softmax(w.dot(new_x_list),axis=0),axis=0)
-test_label=np.argmax(softmax(w.dot(test_x_list),axis=0),axis=0)
+  new_x_list,order_list=new_poly_x_generator(all_data,m)
+  test_x_list,order_list=new_poly_x_generator(test_data,m)
 
-def compare_two_array_count(answer,learn_label):
-  error_count=0
-  for i in range(len(answer)):
-    if answer[i]!=learn_label[i]:
-      error_count=error_count+1
-  return error_count
+  label_array_one_hot=one_hot(all_data[n+1,:],k).T
+  w=np.random.normal(size=(k, len(order_list)+1))
+  ###簡簡單單的優化
+  w,y,error,error_his,count=Optimzer_momentum_2D_norm(0.01,0.9,w,new_x_list,label_array_one_hot)
+  #print(w)
+  #print('learning error',error)
+  answer=np.int64(all_data[-1,:])
+  answer_test=np.int64(test_data[-1,:])
+  learn_label=np.argmax(softmax(w.dot(new_x_list),axis=0),axis=0)
+  test_label=np.argmax(softmax(w.dot(test_x_list),axis=0),axis=0)
 
-learning_error_count=compare_two_array_count(answer,learn_label)
-print('1/0 learning error',learning_error_count)
-test_error_count=compare_two_array_count(answer_test,test_label)
-print('1/0 test error',test_error_count)
+  def compare_two_array_count(answer,learn_label):
+    error_count=0
+    for i in range(len(answer)):
+      if answer[i]!=learn_label[i]:
+        error_count=error_count+1
+    return error_count
+
+  learning_error_count=compare_two_array_count(answer,learn_label)
+  print('1/0 learning error',learning_error_count)
+  test_error_count=compare_two_array_count(answer_test,test_label)
+  print('1/0 test error',test_error_count)
+
+  error_01_list.append(learning_error_count)
+  error_2d_list.append(error)
+  validation_01_list.append(test_error_count)
+print(error_01_list)
+print(error_2d_list)
+print(validation_01_list)
+
+plt.scatter(range(1,50),error_01_list)
+plt.scatter(range(1,50),validation_01_list)
+plt.show()
 ################################################################
-count=0
 # for num in mock_data_number_list:
 #   plot_x=all_data[1,count:count+num]
 #   plot_y=new_x_list[2,count:count+num]
 #   plt.scatter(plot_x,plot_y)
 #   count=count+num
-
+######################################################################
 ###畫這圖真是有夠麻煩，因為是多項式
 ###演篹法很簡單就是用篩的，接近的點就把它畫出來
 # plot_x=np.arange(-1,2,0.01)
