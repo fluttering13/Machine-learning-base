@@ -1,0 +1,156 @@
+###Nonlinear multi-class regression 實作
+###這邊我們選polynomial包含cross terms作為transfrom
+###利用softmax實作多分類問題
+
+#首先我們需要一些模擬數據
+import numpy as np
+import matplotlib.pyplot as plt
+import itertools
+from scipy.special import softmax
+import math
+import time
+import torch
+#sample點用(而且它是保證均勻的取)
+def sampling_circle(sample_size,r_sqaure,x_0,y_0):
+    a = np.random.uniform(size=sample_size)*r_sqaure
+    b = np.random.uniform(size=sample_size)
+    x = np.sqrt(a) * np.cos(2 * np.pi * b)+x_0
+    y = np.sqrt(a) * np.sin(2 * np.pi * b)+y_0
+    return x, y
+###模擬數據數量
+mock_data_number_list=[50,50,50,50]
+verify_data_number_list=[50,50,50,50]
+###種類
+k=np.size(mock_data_number_list)
+
+#把mock data們整理一下，順便加入零的維度(W參數還要考慮一個常數)
+#標籤我們後面在依據數量給
+def data_generator(mock_data_number,r,x0,y0,label):
+  ones=np.ones([1,mock_data_number])
+  data1=np.array(sampling_circle(mock_data_number,r**2,x0,y0))
+  label_array=label*np.ones([1,mock_data_number])
+  #plt.scatter(data1[0,:],data1[1,:])
+  data1=np.concatenate([ones,data1],0)
+  data1=np.concatenate([data1,label_array],0)
+  return data1
+
+data1=data_generator(mock_data_number_list[0],0.2,0.3,0.7,0)
+data2=data_generator(mock_data_number_list[1],0.2,0.7,0.7,1)
+data3=data_generator(mock_data_number_list[2],0.2,0.7,0.3,2)
+data4=data_generator(mock_data_number_list[3],0.2,0.3,0.3,3)
+
+v_data1=data_generator(verify_data_number_list[0],0.2,0.3,0.7,0)
+v_data2=data_generator(verify_data_number_list[1],0.2,0.7,0.7,1)
+v_data3=data_generator(verify_data_number_list[2],0.2,0.7,0.3,2)
+v_data4=data_generator(verify_data_number_list[3],0.2,0.3,0.3,3)
+
+all_data=np.concatenate([data1,data2,data3,data4],1)
+test_data=np.concatenate([v_data1,v_data2,v_data3,v_data4],1)
+
+def one_hot(a,k):
+  a=a.astype(int)
+  return np.eye(k)[a]
+
+def new_poly_x_generator(all_data,m):
+###輸入(1常數+feature+1標籤)*N
+###輸出N*(1常數+new_feature)  
+  n=all_data.shape[0]-2
+  for i in range(n):
+    if i==0:
+      index_string='0'
+    else:
+      index_string=index_string+str(i)
+  order_list=list(itertools.combinations_with_replacement(index_string,m))
+  #print('order_indeies',order_list)
+  ###以下要按照polynomial建置新的feature
+  new_x_list=[]
+  ###tmp_list用來就是新的一列feature
+  ###new_x_list就是所有的
+  for h in range(all_data.shape[1]):
+    tmp_list=[]
+    tmp_list.append(1)
+    ###取出單個點的feature
+    single_vetor_x=all_data[1:n+1,h].flatten()
+    #根據index來相乘
+    for i in range(len(order_list)):
+      tmp_product=1
+      for j in range(m):
+        tmp_product=tmp_product*single_vetor_x[int(order_list[i][j])]
+      tmp_list.append(tmp_product)
+    new_x_list.append(np.array(tmp_list))
+  new_x_list=np.array(new_x_list).T
+  return new_x_list,order_list
+
+def compare_two_array_count(answer,learn_label):
+    error_count=0
+    for i in range(len(answer)):
+        if answer[i]!=learn_label[i]:
+            error_count=error_count+1
+    return error_count
+
+n=2
+error_CE_list=[]
+error_01_list=[]
+validation_01_list=[]
+highest_order=50
+for m in range(1,highest_order):
+    new_x_list,order_list=new_poly_x_generator(all_data,m)
+    test_x_list,order_list=new_poly_x_generator(test_data,m)
+
+    new_x_list=torch.from_numpy(new_x_list).float()
+    test_x_list=torch.from_numpy(test_x_list).float()
+
+    w=torch.rand(k,len(order_list)+1, requires_grad=True)
+
+    y_prime=torch.from_numpy(one_hot(all_data[n+1,:],k).T).float().t()
+
+    #loss=torch.nn.MSELoss()
+    loss=torch.nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam([w], lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
+
+    opt_d=10
+    count=0
+    err_his=[]
+    while opt_d>0.00001:
+        y=torch.mm(w,new_x_list).t()
+        loss_fn=loss(y,y_prime)
+
+        optimizer.zero_grad()   # 清空上一步的残余更新参数值
+        loss_fn.backward()         # 误差反向传播, 计算参数更新值 backward懶人包
+        optimizer.step()        # 将参数更新值施加到 net 的 parameters 上
+        err_his.append(loss_fn.item())
+        count=count+1
+        if count>1:
+            opt_d=abs(err_his[-1]-err_his[-2])
+
+    w=w.detach().numpy()
+    answer=np.int64(all_data[-1,:])
+    answer_test=np.int64(test_data[-1,:])
+    learn_label=np.argmax(softmax(w.dot(new_x_list),axis=0),axis=0)
+    test_label=np.argmax(softmax(w.dot(test_x_list),axis=0),axis=0)
+
+    print('CE norm error',err_his[-1])
+
+    learning_error_count=compare_two_array_count(answer,learn_label)
+    print('1/0 learning error',learning_error_count)
+    test_error_count=compare_two_array_count(answer_test,test_label)
+    print('1/0 test error',test_error_count)
+
+    error_CE_list.append(err_his[-1])
+    error_01_list.append(learning_error_count)
+    validation_01_list.append(test_error_count)
+
+print(error_CE_list)
+
+#plt.scatter(range(1,highest_order),error_CE_list,label='error_CE')
+plt.scatter(range(1,highest_order),error_01_list,label='train_error_01')
+plt.scatter(range(1,highest_order),validation_01_list,label='validation_error_01')
+plt.legend(
+    loc='upper left',
+    fontsize=10,
+    shadow=True,
+    facecolor='#ccc',
+    edgecolor='#000',
+    title='m-oder-ploy-regression',
+    title_fontsize=10)
+plt.show()
