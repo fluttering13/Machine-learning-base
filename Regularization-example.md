@@ -1,7 +1,7 @@
 # Over-fitting (過擬合)
 先前我們介紹了nonlinear的方式做迴歸分析，我們再次利用這個example
 
-https://github.com/fluttering13/Machine-learning-base/blob/main/nonlinear-regression.md
+https://github.com/fluttering13/Machine-learning-base/blob/main/polynomial-regression.md
 
 現在我目標是有四個分類並利用上述方式來進行
 
