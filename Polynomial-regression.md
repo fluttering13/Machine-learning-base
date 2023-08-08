@@ -1,4 +1,4 @@
-# Nonlinear regression
+# Polynomial-regression
 
 先前我們處理過的都是利用線性的方式去做分類，
 
