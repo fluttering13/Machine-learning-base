@@ -1,15 +1,17 @@
-##linear multi-class regression 實作
+##Nonlinear multi-class regression 實作
 ###這邊我們選legredre-polynomial作為transfrom
+###利用softmax實作多分類問題
 
 #首先我們需要一些模擬數據
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.special import softmax
 import itertools
 import scipy
 import math
 import time
-np.random.seed(50)
-
+import torch
+np.random.seed(66)
 #sample點用(而且它是保證均勻的取)
 def sampling_circle(sample_size,r_sqaure,x_0,y_0):
     a = np.random.uniform(size=sample_size)*r_sqaure
@@ -72,7 +74,6 @@ def compare_two_array_count(answer,learn_label):
 
 n=2
 error_CE_list=[]
-error_sq_list=[]
 error_01_list=[]
 validation_01_list=[]
 highest_order=100
@@ -81,40 +82,63 @@ for m in range(2,highest_order):
 
     input_x=all_data[1:1+n,:]
 
-    new_x_list=new_legredre_poly_x_generator(all_data[1:1+n,:],m).T
+    new_x_list=new_legredre_poly_x_generator(all_data[1:1+n,:],m)
     test_x_list=new_legredre_poly_x_generator(test_data[1:1+n,:],m)
 
+    new_x_list=torch.from_numpy(new_x_list).float()
+    test_x_list=torch.from_numpy(test_x_list).float()
 
-    y_prime=one_hot(all_data[n+1,:],k)
-    #多強的正則因子，越接近1越強
-    lam=10
-    x_square=new_x_list.T.dot(new_x_list)
-    w=scipy.linalg.inv(x_square+lam*np.identity(x_square.shape[0])).dot(new_x_list.T).dot(y_prime)
-    
-    w=w.T
-    new_x_list=new_x_list.T
+    w=torch.rand(k,2*m, requires_grad=True)
 
+    y_prime=torch.from_numpy(one_hot(all_data[n+1,:],k).T).float().t()
+
+    #loss=torch.nn.MSELoss()
+    loss=torch.nn.CrossEntropyLoss()
+
+
+    optimizer = torch.optim.Adam([w], lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
+
+    opt_d=10
+    count=0
+    err_his=[]
+    while opt_d>0.00001:
+        y=torch.mm(w,new_x_list).t()
+        loss_fn=loss(y,y_prime)
+        ###regularization L1
+        lambda_l1=0.0001
+        loss_fn=loss_fn+torch.sum(torch.abs(torch.flatten(w)))*lambda_l1
+
+        optimizer.zero_grad()   # 清空上一步的残余更新参数值
+        loss_fn.backward()         # 误差反向传播, 计算参数更新值 backward懶人包
+        optimizer.step()        # 将参数更新值施加到 net 的 parameters 上
+        err_his.append(loss_fn.item())
+        count=count+1
+        if count>1:
+            opt_d=abs(err_his[-1]-err_his[-2])
+        
+    w=w.detach().numpy()
     answer=np.int64(all_data[-1,:])
     answer_test=np.int64(test_data[-1,:])
-    learn_label=np.argmax(w.dot(new_x_list),axis=0)
-    test_label=np.argmax(w.dot(test_x_list),axis=0)
-    
+    learn_label=np.argmax(softmax(w.dot(new_x_list),axis=0),axis=0)
+    test_label=np.argmax(softmax(w.dot(test_x_list),axis=0),axis=0)
+
+    print('CE norm error',err_his[-1])
 
     learning_error_count=compare_two_array_count(answer,learn_label)
     print('1/0 learning error',learning_error_count)
     test_error_count=compare_two_array_count(answer_test,test_label)
     print('1/0 test error',test_error_count)
 
-
+    error_CE_list.append(err_his[-1])
     error_01_list.append(learning_error_count)
     validation_01_list.append(test_error_count)
 
-    error_sq=np.linalg.norm(w.dot(new_x_list).T.flatten()-y_prime.flatten(),2)/len(w.dot(new_x_list).T.flatten())
-    error_sq_list.append(error_sq)
 
+print(error_CE_list)
+
+#plt.scatter(range(1,highest_order),error_CE_list,label='error_CE')
 plt.scatter(range(2,highest_order),error_01_list,label='train_error_01')
 plt.scatter(range(2,highest_order),validation_01_list,label='validation_error_01')
-
 plt.legend(
     loc='upper left',
     fontsize=10,
@@ -126,5 +150,5 @@ plt.legend(
 plt.show()
 
 
-plt.scatter(range(2,highest_order),error_sq_list,label='2d_error_01')
+plt.scatter(range(2,highest_order),error_CE_list,label='validation_error_01')
 plt.show()
