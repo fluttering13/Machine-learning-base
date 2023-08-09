@@ -447,6 +447,8 @@ Cross-entropy error隨著階數越高，轉成
 
 underfitting欠擬合的危機解除！再來就是要修過擬合的問題啦，下一篇會介紹！
 
+https://github.com/fluttering13/Machine-learning-base/blob/main/Regularization-example.md
+
 ```
 ##Nonlinear multi-class regression 實作
 ###這邊我們選legredre-polynomial作為transfrom
