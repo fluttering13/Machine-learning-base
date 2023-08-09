@@ -195,10 +195,7 @@ plt.scatter(range(2,highest_order),error_sq_list,label='2d_error_01')
 plt.show()
 ```
 
-## Bayesian regularization
-
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/re-example-3-0.png" width="500px"/></div
-                                                                                                                                                       
+## Bayesian regularization                                                                                                                          
 承之前介紹過的，一個很方便的正則化技巧，就是我們利用條件機率與對應的機率分佈來進行正則化
 
 實作上就是直接在誤差函數裡面加入正則化的項就好
@@ -211,6 +208,11 @@ loss_fn=loss(y,y_prime)
 lambda_l1=0.0001
 loss_fn=loss_fn+torch.sum(torch.abs(torch.flatten(w)))*lambda_l1
 ```
+看一下我們之前的模型運做得如何，在加入正則化之前
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/re-example-3-0.png" width="500px"/></div
+
+在使用正則化後
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/re-example-3-1.png" width="500px"/></div
 
