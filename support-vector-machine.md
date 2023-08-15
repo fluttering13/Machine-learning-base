@@ -160,9 +160,17 @@ $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}
 
 事實上在前面polynomial regression我們就做了這件事情，
 
-如果我們的特徵空間 ${R^d}$ 不是線性可分的，但一定存在 ${\tilde d} > d$ 令 ${R^d}線性可分
+如果我們的特徵空間 ${R^d}$ 不是線性可分的，但一定存在 ${\tilde d} > d$ 令 ${R^d}$ 線性可分
 
 意思說我們可以找到某一種映射(mapping)，讓新的數據可以在新的空間被分開
+
+回顧一下，我們的knernal function 寫成
+
+$${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}^T} } {x_j} - \sum\limits_i {{\alpha _i}} $$
+
+可以把原本的內積項 ${x_i}^T{x_j}$ 替換成一個映射函數 $\phi ({x_i}^T)\phi ({x_j})$
+
+$$k({x_i},{x_j}) = \langle \phi ({x_i}),\phi ({x_j})\rangle $$
 
 那在什麼情況下要使用那些kernal function呢？
 
@@ -170,3 +178,84 @@ $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}
 
 如果樣本數眾多，可以直接使用深度學習來篩選特徵
 
+介於中間的時候就可以使用我們後面會介紹的RBF
+
+### Mercer condition
+
+核函數對應的矩 必須為半正定的
+
+$$K: = {\left[ {k\left( {{x_i},{x_j}} \right)} \right]_{m \times m}}$$
+
+### polynomial knernal
+
+先前盡量寫出general的polynomial的例子可以在內積之後看成是
+
+$$\phi ({x_i}^T)\phi ({x_j}) = {\left( {{x_i}{x_j} + 1} \right)^d}$$
+
+例如說 $$d = 2$$
+
+$${x_i}^2{x_j}^2 + 2{x_i}{x_j} + 1$$
+
+向量x寫成
+
+$$x = \left[ \matrix{
+  {x_1} \hfill \cr 
+  {x_2} \hfill \cr}  \right]$$
+  
+x的映射關係從 ${R^2} \mapsto {R^3}$ 寫成
+
+$$
+\phi: x \mapsto\left[\begin{array}{l}
+x_1^2 \\
+x_2^2 \\
+x_1 x_2 \sqrt{2}
+\end{array}\right]
+$$
+
+### Radial basis function kernel  (RBF)
+
+$$k\left( {{x_i},{x_j}} \right): = \exp \left( { - {{\left( {{x_i} - {x_j}} \right)}^2}} \right)$$
+
+映射關係寫成
+
+$$
+\phi: x \mapsto \exp \left(-x^2\right)\left[\begin{array}{c}
+1 \\
+\sqrt{\frac{2}{1}} x \\
+\sqrt{\frac{2^2}{2 !}} x^2 \\
+\vdots
+\end{array}\right]
+$$
+
+只是簡單的泰勒展開，這邊方便閱讀我們寫成x跟y
+
+$$
+k(x, y)=\langle\phi(x), \phi(y)\rangle=e^{-\sigma\|x-y\|^2}=e^{-\sigma\left(x^2-2 x y+y^2\right)}=e^{-\sigma\left(x^2+y^2\right)} e^{\sigma 2 x y}
+$$
+
+$$
+=e^{-\sigma x^2}\left[\begin{array}{c}
+1 \\
+\sqrt{\frac{2 \sigma}{1 !}} x \\
+\sqrt{\frac{(2 \sigma)^2}{2 !}} x^2 \\
+\vdots
+\end{array}\right]^T e^{-\sigma y^2}\left[\begin{array}{c}
+1 \\
+\sqrt{\frac{2 \sigma}{1 !}} y \\
+\sqrt{\frac{(2 \sigma)^2}{2 !}} y^2 \\
+\vdots
+\end{array}\right]
+$$
+
+每一個element
+
+$$
+e_n(x)=\sqrt{\frac{(2 \sigma)^n}{n !}} x^n e^{-\sigma x^2}, n=0,1,2, \ldots
+$$
+
+當然，這只是單個x，如果有d個feature，整體就寫成
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq1.png" width="500px"/></div
+
+## soft margin
+相較於先「拓寬道路」，我們選擇讓
