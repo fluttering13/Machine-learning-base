@@ -7,7 +7,7 @@
 
 那現在有沒有一個大補包，比較系統化，又期望它很有效率的，有的，它就是今天要介紹的SVM
 
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM1.png" width="500px"/></div
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM1.png" width="300px"/></div
 
 如果今天是在二維數據裡面做二分類的問題，我們就是在找一條線去割開這兩個分類
 
@@ -264,7 +264,7 @@ $$
 
 我們可以改寫一下優化函數與條件，讓今天分類後的w是有一定的錯誤容忍度，更加有robustness
 
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq2.png" width="500px"/></div
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq2.png" width="300px"/></div
 
 其中 $I$ 為indicator function，$C$ 是用來權衡附加條件與原本的目標函數的參數
 
@@ -283,18 +283,18 @@ $$
 
 原問題就寫成
 
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq3.png" width="500px"/></div
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq3.png" width="200px"/></div
 
 新的lagrange寫成
 
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq4.png" width="500px"/></div
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq4.png.png" width="350px"/></div
 
 求偏導
 
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq5.png" width="500px"/></div
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq5.png.png" width="200px"/></div
 
 最後一件事情就是原問題其實可以等價成下列，也就是做了一個正則化
 
-### softmargin and regularization
+### Softmargin and regularization
 
 $${1 \over m}\sum\limits_{i = 1}^m {\max } \left( {0,1 - {y_i}\left( {{w^{{\rm{T}}}}\phi \left( {{x_i}} \right) + b} \right) + {\lambda  \over 2}{{\left| w \right|}^2}} \right.$$
