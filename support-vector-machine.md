@@ -257,5 +257,44 @@ $$
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq1.png" width="500px"/></div
 
-## soft margin
-相較於先「拓寬道路」，我們選擇讓
+具體來說使用RBF有一些細節
+## Soft margin
+
+假如今天樣本身就是有一些錯誤，一些noise
+
+我們可以改寫一下優化函數與條件，讓今天分類後的w是有一定的錯誤容忍度，更加有robustness
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq2.png" width="500px"/></div
+
+其中 $I$ 為indicator function，$C$ 是用來權衡附加條件與原本的目標函數的參數
+
+$$s.t.\ {y_i}\left( {{w^T}\phi \left( x \right) + b} \right) \ge 1$$
+
+但這邊有個痛點，就是indicator function不連續，也不是凸函數，所以我們要在做一些手腳
+
+我們可以引入一個slack variable $\xi_i=$
+
+$$
+\left\{\begin{array}{l}
+0 \quad, \text { if } y_i\left(w^T \phi(x)+b\right) \geq 1 \\
+1-y_i\left(w^T \phi\left(x_i\right)+b\right), \text { else }
+\end{array}\right.
+$$
+
+原問題就寫成
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq3.png" width="500px"/></div
+
+新的lagrange寫成
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq4.png" width="500px"/></div
+
+求偏導
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq5.png" width="500px"/></div
+
+最後一件事情就是原問題其實可以等價成下列，也就是做了一個正則化
+
+### softmargin and regularization
+
+$${1 \over m}\sum\limits_{i = 1}^m {\max } \left( {0,1 - {y_i}\left( {{w^{{\rm{T}}}}\phi \left( {{x_i}} \right) + b} \right) + {\lambda  \over 2}{{\left| w \right|}^2}} \right.$$
