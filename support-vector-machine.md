@@ -7,6 +7,8 @@
 
 那現在有沒有一個大補包，比較系統化，又期望它很有效率的，有的，它就是今天要介紹的SVM
 
+把線性可以做得到的事情最大化
+
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM1.png" width="300px"/></div
 
 如果今天是在二維數據裡面做二分類的問題，我們就是在找一條線去割開這兩個分類
