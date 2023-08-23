@@ -72,7 +72,9 @@ python: cvxpy
 
 MATLAB: YIMIP+MOSEK
 
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-pic1.png" width="300px"/></div
+以下我們寫一個簡單的code來測試一下
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-pic1.png" width="500px"/></div
 
 ```
 ###SVM原型是針對二分類問題
@@ -150,6 +152,7 @@ plt.plot(plt_x,-w.value[0,0]/w.value[0,1]*plt_x-b.value/w.value[0,1])
 plt.xlim(0,1)
 plt.ylim(0,1)
 plt.show()
+
 ```
 
 # Lagrange multiplier and dual problem
