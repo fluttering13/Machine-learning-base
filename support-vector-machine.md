@@ -270,9 +270,9 @@ result = prob.solve()
 
 $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}^T} } {x_j} - \sum\limits_i {{\alpha _i}} $$
 
-可以把原本的內積項 ${x_i}^T{x_j}$ 替換成一個映射函數 $\phi ({x_i}^T)\phi ({x_j})$
+可以把原本的內積項 ${x_i}^T{y_j}$ 替換成一個映射函數 $\phi ({x_i}^T)\phi ({y_j})$
 
-$$k({x_i},{x_j}) = \langle \phi ({x_i}),\phi ({x_j})\rangle $$
+$$k({x_i},{y_j}) = \langle \phi ({x_i}),\phi ({y_j})\rangle $$
 
 我們就說這個映射函數就是所謂的kernal function
 
