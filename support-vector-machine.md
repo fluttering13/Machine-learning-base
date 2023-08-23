@@ -396,8 +396,11 @@ $$
 
 
 
-最後一件事情就是原問題其實可以等價成下列，也就是做了一個正則化
+
 
 ### Softmargin and regularization
+最後一件事情就是原問題其實可以等價成下列，也就是做了一個正則化
+
+從Linea programming的 dual program可以等價成解下面這個問題
 
 $${1 \over m}\sum\limits_{i = 1}^m {\max } \left( {0,1 - {y_i}\left( {{w^{{\rm{T}}}}\phi \left( {{x_i}} \right) + b} \right) + {\lambda  \over 2}{{\left| w \right|}^2}} \right.$$
