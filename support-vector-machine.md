@@ -72,18 +72,19 @@ python: cvxpy
 
 MATLAB: YIMIP+MOSEK
 
-以下我們寫一個簡單的code來測試一下
-
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-pic1.png" width="500px"/></div
 
+以下可以寫個簡單的code跑一下
+
 ```
+import numpy as np
+import matplotlib.pyplot as plt
+import cvxpy as cvx
+
 ###SVM原型是針對二分類問題
 ###註解部分拿掉是soft margin
 
 #首先我們需要一些模擬數據
-import numpy as np
-import matplotlib.pyplot as plt
-import cvxpy as cvx
 #sample點用(而且它是保證均勻的取 )
 def sampling_circle(sample_size,r_sqaure,x_0,y_0):
     a = np.random.uniform(size=sample_size)*r_sqaure
@@ -240,7 +241,20 @@ $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}
 
 這就代表著其實求解的問題只跟這些y跟k的之間的內積有關
 
-我們在這裡只有用到最簡單的想法就是把道路盡量的拓寬
+回顧之前的prmimal可以寫成在linear program內的qudractic的form，
+
+我們可以令一個Gram matrix是這些內積 ${\rm{ < }}x,y{\rm{ > }}$ 的組合，在寫問題的時候會更加的方便
+
+$$G = {\rm{ < }}x,y{{\rm{ > }}^{\rm{T}}} < x,y > $$
+
+用cvxpy的包寫會更清楚一些
+```
+objective = cvx.Maximize(cvx.sum(a)-(1/2)*cvx.quad_form(a, G))
+constraints = [a <= 0, cp.sum(cp.multiply(a,y)) == 0] # KKT
+prob = cp.Problem(objective, constraints)
+result = prob.solve()
+```
+順帶一題gram matrix本身有很多對稱的特性，在數值處理上有很多逼近它的辦法，在運算上也可以省下一些資源
 
 接下來我們會介紹如何讓SVM更強大的辦法，可以做到一些非線性的事情
 
@@ -252,13 +266,15 @@ $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}
 
 意思說我們可以找到某一種映射(mapping)，讓新的數據可以在新的空間被分開
 
-回顧一下，我們的knernal function 寫成
+回顧一下，我們的lagrange的部分可以寫成
 
 $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}^T} } {x_j} - \sum\limits_i {{\alpha _i}} $$
 
 可以把原本的內積項 ${x_i}^T{x_j}$ 替換成一個映射函數 $\phi ({x_i}^T)\phi ({x_j})$
 
 $$k({x_i},{x_j}) = \langle \phi ({x_i}),\phi ({x_j})\rangle $$
+
+我們就說這個映射函數就是所謂的kernal function
 
 那在什麼情況下要使用那些kernal function呢？
 
@@ -341,7 +357,7 @@ $$
 e_n(x)=\sqrt{\frac{(2 \sigma)^n}{n !}} x^n e^{-\sigma x^2}, n=0,1,2, \ldots
 $$
 
-當然，這只是單個x，如果有d個feature，整體就寫成
+當然，這只是單個 $x$，如果有 $d$ 個features，整體就寫成
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq1.png" width="500px"/></div
 
