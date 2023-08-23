@@ -365,6 +365,7 @@ $$
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq1.png" width="500px"/></div
 
+RBF的實作先留個坑
 
 ## Soft margin
 
