@@ -363,8 +363,9 @@ data2=data_generator(mock_data_number_list[1],0.3,0.7,0.7,-1)
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq2.png" width="300px"/></div
 
+其中
 
-其中 $I$ 為indicator function， $C$ 是用來權衡附加條件與原本的目標函數的參數
+$I$ 為indicator function， $C$ 是用來權衡附加條件與原本的目標函數的參數
 
 $$s.t.\ {y_i}\left( {{w^T}\phi \left( x \right) + b} \right) \ge 1$$
 
@@ -395,6 +396,7 @@ $$
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-pic2.png" width="500px"/></div
 
+搞定！
 ## Softmargin and regularization
 
 最後一件事情就是原問題其實可以等價成下列，也就是做了一個正則化
