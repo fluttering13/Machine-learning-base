@@ -288,7 +288,7 @@ $$k({x_i},{y_j}) = \langle \phi ({x_i}),\phi ({y_j})\rangle $$
 
 核函數對應的矩 必須為半正定的
 
-$$K: = {\left[ {k\left( {{x_i},{x_j}} \right)} \right]_{m \times m}}$$
+$$K: = {\left[ {k\left( {{x_i},{y_j}} \right)} \right]_{m \times m}}$$
 
 ### polynomial knernal
 
