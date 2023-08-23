@@ -187,31 +187,29 @@ $$
 其中
 $$\alpha  \ge 0$$
 
-## Primal and dual
-在LP裡面主問題
-$$Max\ {c^T}x$$
-$$subject\ to\;Ax \le b,\ x \ge 0$$
-也等價成解下面的稱之為對偶問題
-$$Min\ {b^T}y$$
-$$subject\ to\ {A^T}y \le c,\ y \ge 0$$
-
 ## Karush–Kuhn–Tucker conditions (KKT conditions)
+在寫成lagrange前的問題我們就叫作主問題
+
+寫成之後的叫做對偶問題
+
 主問題可行: $g,h \le 0$
 
 偶問題可行: $\alpha \ge 0$
+
+註：這邊的primal跟dual不是指Linear program上的
 
 complementary slackness: 等式成立的時候 $\alpha_i g_i=0$
 
 ## Slatter condiction
 只要
 
-f ,g 是convex
+$f$ , $g$ 是convex function
 
-h 為affine
+$h$ 為affine function
 
-可行域有一個約束成立
+而且可行域有一個約束成立
 
-則對偶問題等價於原問題
+則對偶問題就可以等價於成原問題
 
 # SVM problem
 SVM 符合 slatter condiction，所以我們就可以套入lagrange multiplier
