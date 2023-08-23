@@ -318,9 +318,13 @@ $$
 
 ### Radial basis function kernel  (RBF)
 
-$$k\left( {{x_i},{x_j}} \right): = \exp \left( { - {{\left( {{x_i} - {x_j}} \right)}^2}} \right)$$
+$$k\left( {{x_i},{y_j}} \right): = \exp \left( { - {{\left( {{x_i} - {y_j}} \right)}^2}} \right)$$
 
-映射關係寫成
+物理意義上，這邊可以解釋為 ${x_i} - {y_j}$ 之間的相關性，
+
+當 ${x_i} = {y_j}$時RBF值為1，相差很大的時候RBF為0
+
+映射關係可以寫成，也可以想像成無窮維且收斂的polynomial
 
 $$
 \phi: x \mapsto \exp \left(-x^2\right)\left[\begin{array}{c}
@@ -361,7 +365,7 @@ $$
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq1.png" width="500px"/></div
 
-具體來說使用RBF有一些細節
+
 ## Soft margin
 
 假如今天樣本身就是有一些錯誤，一些noise
