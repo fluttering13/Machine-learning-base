@@ -51,16 +51,18 @@ def compare_two_array_count(answer,learn_label):
     return error_count
 ###print(cvxpy.installed_solvers())
 
+#C=1
 x=all_data[1:n+1,:]
 y=all_data[-1,:].reshape([1,N])
 w=cvx.Variable([1,n])
 b=cvx.Variable()
-#xi=cvx.Variable([1,N])
+xi=cvx.Variable([N])
 obj=cvx.Minimize(cvx.square(cvx.norm(cvx.vec(w))))
 #obj=cvx.Minimize(cvx.square(cvx.norm(cvx.vec(w)))+C*cvx.sum(xi))
 constraints=[]
 constraints.append(cvx.vec(cvx.multiply(y,w@x+b))>=1)
-# constraints.append(xi>=0)
+#constraints.append(cvx.vec(cvx.multiply(y,w@x+b))>=1-xi)
+#constraints.append(xi>=0)
 prob = cvx.Problem(obj,constraints)
 prob.solve()
 print('sum over w',prob.value)
@@ -72,6 +74,7 @@ plt_x=np.linspace(0.1,0.9,100)
 plt.plot(plt_x,-w.value[0,0]/w.value[0,1]*plt_x-b.value/w.value[0,1])
 plt.xlim(0,1)
 plt.ylim(0,1)
+
 plt.show()
 
 
