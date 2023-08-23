@@ -130,16 +130,18 @@ def compare_two_array_count(answer,learn_label):
     return error_count
 ###print(cvxpy.installed_solvers())
 
+#C=1
 x=all_data[1:n+1,:]
 y=all_data[-1,:].reshape([1,N])
 w=cvx.Variable([1,n])
 b=cvx.Variable()
-#xi=cvx.Variable([1,N])
+xi=cvx.Variable([N])
 obj=cvx.Minimize(cvx.square(cvx.norm(cvx.vec(w))))
 #obj=cvx.Minimize(cvx.square(cvx.norm(cvx.vec(w)))+C*cvx.sum(xi))
 constraints=[]
 constraints.append(cvx.vec(cvx.multiply(y,w@x+b))>=1)
-# constraints.append(xi>=0)
+#constraints.append(cvx.vec(cvx.multiply(y,w@x+b))>=1-xi)
+#constraints.append(xi>=0)
 prob = cvx.Problem(obj,constraints)
 prob.solve()
 print('sum over w',prob.value)
@@ -151,6 +153,7 @@ plt_x=np.linspace(0.1,0.9,100)
 plt.plot(plt_x,-w.value[0,0]/w.value[0,1]*plt_x-b.value/w.value[0,1])
 plt.xlim(0,1)
 plt.ylim(0,1)
+
 plt.show()
 
 ```
@@ -348,6 +351,13 @@ $$
 ## Soft margin
 
 假如今天樣本身就是有一些錯誤，一些noise
+例如說我把前面的點有些重合，它們是線性不可分的
+
+```
+data1=data_generator(mock_data_number_list[0],0.3,0.3,0.7,1)
+data2=data_generator(mock_data_number_list[1],0.3,0.7,0.7,-1)
+```
+這個時候解下去通常是infeasible
 
 我們可以改寫一下優化函數與條件，讓今天分類後的w是有一定的錯誤容忍度，更加有robustness
 
@@ -357,7 +367,7 @@ $$
 
 $$s.t.\ {y_i}\left( {{w^T}\phi \left( x \right) + b} \right) \ge 1$$
 
-但這邊有個痛點，就是indicator function不連續，也不是凸函數，所以我們要在做一些手腳
+但這邊有個痛點，就是indicator function不連續，也不是凸函數，所以我們要在做一些手腳，讓整個東西看起來是線性的
 
 我們可以引入一個slack variable $\xi_i=$
 
@@ -379,6 +389,12 @@ $$
 求偏導
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq5.png.png" width="200px"/></div
+
+最後來看看做的怎麼樣，把前面的code的註解打開就是softmargin的版本
+
+<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-pic2.png" width="500px"/></div
+
+
 
 最後一件事情就是原問題其實可以等價成下列，也就是做了一個正則化
 
