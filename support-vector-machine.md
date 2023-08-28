@@ -35,7 +35,7 @@ $$subject\ to\ wx + b = 0$$
 
 在最優化問題裡面objective function有一些等價的表述，我們去絕對值後，後續在數學的處理上會有一些好處(不會有尖點的問題)
 
-$$Ma{x_w}\ \  {1 \over {\left| w \right|}} = Mi{n_w}\,\left| w \right| = Mi{n_w}{1 \over 2}{w^2}$$
+$$Ma{x_w}\ \  {1 \over {\left| w \right|}} = Mi{n_w}\,\left| w \right = Mi{n_w}{1 \over 2}{w^2}$$
 
 $$subject \  to \  y \left( {wx + b} \right) \ge 1$$
 
@@ -243,9 +243,9 @@ $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}
 
 回顧之前的prmimal可以寫成在linear program內的qudractic的form，
 
-我們可以令一個Gram matrix是這些內積 ${\rm{ < }}x,x{\rm{ > }}$ 與 ${\rm{ < }}y,y{\rm{ > }}$ 的組合，在寫問題的時候會更加的方便
+我們可以令一個Gram matrix是這些內積後的向量 $\left( {{x_i}{x_j}} \right)$ 與 $\left( {{y_i}{y_j}} \right)$ 的組合，在寫問題的時候會更加的方便
 
-$$G = {\rm{ < }}x,x{{\rm{ > }}^{\rm{T}}} < y,y > $$
+$$G = {\left( {{x_i}{x_j}} \right)^T}\left( {{y_i}{y_j}} \right)$$
 
 用cvxpy的包寫會更清楚一些
 ```
