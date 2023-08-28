@@ -7,6 +7,8 @@
 
 那現在有沒有一個大補包，比較系統化，又期望它很有效率的，有的，它就是今天要介紹的SVM
 
+根基於Linear programing可以很有效率的解決問題，而且SVM的技術也發展的很純熟
+
 把線性可以做得到的事情最大化
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM1.png" width="300px"/></div
