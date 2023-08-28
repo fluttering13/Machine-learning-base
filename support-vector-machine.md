@@ -193,13 +193,23 @@ $$\alpha  \ge 0$$
 ## Karush–Kuhn–Tucker conditions (KKT conditions)
 在寫成lagrange前的問題我們就叫作主問題
 
-寫成之後的叫做對偶問題
+$$Mi{n_{w,b}}Ma{x_{\alpha  \ge 0}}{1 \over 2}w{w^T} + \alpha \sum\limits_i^N {1 - {y_i}\left( {w{x_n} + b} \right)} $$
+
+這邊我們可以看成$Mi{n_w}{1 \over 2}{w^2}$ 再加上要 Max constraints的部分
+
+意思是解完lagrange的問題要跟原本寫成 $Mi{n_w}{1 \over 2}{w^2}$ 原問題應該要有相同的bound
+
+再來，我們這邊稍微交換一下Max跟min就是對偶問題，先做Max或是先做Min都不影響最優解的答案
+
+$$Mi{n_{\alpha  \ge 0}}Ma{x_{w,b}}{1 \over 2}w{w^T} + \alpha \sum\limits_i^N {1 - {y_i}\left( {w{x_n} + b} \right)} $$
 
 主問題可行: $g,h \le 0$
 
-偶問題可行: $\alpha \ge 0$
+對偶問題可行: $\alpha \ge 0$
 
-註：這邊的primal跟dual不是指Linear program上的
+註：這邊的primal跟dual不是指Linear program上的，而是專指對哪個參數先進行優化的想法
+
+數學上我們會有這些不等式存在的時候，但是我們希望解完的答案要跟原問題是一樣的，等式發生的時候我們給它一個名字
 
 complementary slackness: 等式成立的時候 $\alpha_i g_i=0$
 
