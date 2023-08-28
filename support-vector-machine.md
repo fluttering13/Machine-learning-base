@@ -423,6 +423,15 @@ $$
 
 最後來看看做的怎麼樣，把前面的code的註解打開就是softmargin的版本
 
+只是添加了一個關於 $\xi$ 的參數
+```
+obj=cvx.Minimize(cvx.square(cvx.norm(cvx.vec(w)))+C*cvx.sum(xi))
+constraints=[]
+constraints.append(cvx.vec(cvx.multiply(y,w@x+b))>=1-xi)
+constraints.append(xi>=0)
+```
+
+
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-pic2.png" width="500px"/></div
 
 搞定！
