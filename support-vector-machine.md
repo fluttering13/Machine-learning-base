@@ -464,3 +464,11 @@ constraints.append(xi>=0)
 從Linea programming的 dual program可以等價成解下面這個問題
 
 $${1 \over m}\sum\limits_{i = 1}^m {\max } \left( {0,1 - {y_i}\left( {{w^{{\rm{T}}}}\phi \left( {{x_i}} \right) + b} \right) + {\lambda  \over 2}{{\left| w \right|}^2}} \right.$$
+
+SVM相關技術已經整合了我們對於要如何處理data的很多想像，
+
+Kneral trick帶來了顯現更多data feature的可能性
+
+Softmargin可以讓整體的預測線條更加smooth，相當於做了正則化
+
+大補包就是如此的棒！
