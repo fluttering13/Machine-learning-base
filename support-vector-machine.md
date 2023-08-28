@@ -243,9 +243,9 @@ $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}
 
 回顧之前的prmimal可以寫成在linear program內的qudractic的form，
 
-我們可以令一個Gram matrix是這些內積 ${\rm{ < }}x,y{\rm{ > }}$ 的組合，在寫問題的時候會更加的方便
+我們可以令一個Gram matrix是這些內積 ${\rm{ < }}x,x{\rm{ > }}$ 與 ${\rm{ < }}y,y{\rm{ > }}$ 的組合，在寫問題的時候會更加的方便
 
-$$G = {\rm{ < }}x,y{{\rm{ > }}^{\rm{T}}} < x,y > $$
+$$G = {\rm{ < }}x,x{{\rm{ > }}^{\rm{T}}} < x,y > $$
 
 用cvxpy的包寫會更清楚一些
 ```
@@ -254,9 +254,15 @@ constraints = [a <= 0, cp.sum(cp.multiply(a,y)) == 0] # KKT
 prob = cp.Problem(objective, constraints)
 result = prob.solve()
 ```
-順帶一題gram matrix本身有很多對稱的特性，在數值處理上有很多逼近它的辦法，在運算上也可以省下一些資源
+乍看之下構建一個gram matrix 你需要 $O\left( {{n^2}} \right)$ 的複雜度(n為feature的數量)
 
-接下來我們會介紹如何讓SVM更強大的辦法，可以做到一些非線性的事情
+但因為gram matrix本身有很多對稱的特性，在數值處理上有很多逼近它的辦法，在運算上也可以省下一些資源
+
+還有這個matrix事實上只跟內積是相關的運算，意思是其實我們不需要開到 $n^2$ 的格子才做這些運算
+
+物理意義是使用內積計算相當於我們執著於 $x$ 跟 $y$ 之間的相關性
+
+接下來我們會介紹Kernal method，我們直接在n的空間內做這些內積的function去做計算
 
 ## 核方法 Kernal trick
 
@@ -270,9 +276,9 @@ result = prob.solve()
 
 $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}^T} } {x_j} - \sum\limits_i {{\alpha _i}} $$
 
-可以把原本的內積項 ${x_i}^T{y_j}$ 替換成一個映射函數 $\phi ({x_i}^T)\phi ({y_j})$
+可以把原本的內積項 ${x_i}^T{x_j}$ 替換成一個映射函數 $\phi ({x_i}^T)\phi ({x_j})$
 
-$$k({x_i},{y_j}) = \langle \phi ({x_i}),\phi ({y_j})\rangle $$
+$$k({x_i},{x_j}) = \langle \phi ({x_i}),\phi ({x_j})\rangle $$
 
 我們就說這個映射函數就是所謂的kernal function
 
@@ -318,11 +324,11 @@ $$
 
 ### Radial basis function kernel  (RBF)
 
-$$k\left( {{x_i},{y_j}} \right): = \exp \left( { - {{\left( {{x_i} - {y_j}} \right)}^2}} \right)$$
+$$k\left( {{x_i},{x_j}} \right): = \exp \left( { - {{\left( {{x_i} - {x_j}} \right)}^2}} \right)$$
 
-物理意義上，這邊可以解釋為 ${x_i} - {y_j}$ 之間的相關性，
+物理意義上，這邊可以解釋為 ${x_i} - {x_j}$ 之間的相關性，
 
-當 ${x_i} = {y_j}$時RBF值為1，相差很大的時候RBF為0
+當 ${x_i} = {x_j}$時RBF值為1，相差很大的時候RBF為0
 
 映射關係可以寫成，也可以想像成無窮維且收斂的polynomial
 
@@ -335,7 +341,11 @@ $$
 \end{array}\right]
 $$
 
-只是簡單的泰勒展開，這邊方便閱讀我們寫成x跟y
+這邊可以等價成簡單的泰勒展開，這邊方便閱讀我們寫成 $x$ 跟 $y$
+
+意思是我們在RBF其實也等同於做了一個在無限維度去逼近的效果，但事實上我們只使用到 $n$ 的空間
+
+也就意味著我們以小小的資源，就可以做到很多事情，當然做的準不準因問題而定
 
 $$
 k(x, y)=\langle\phi(x), \phi(y)\rangle=e^{-\sigma\|x-y\|^2}=e^{-\sigma\left(x^2-2 x y+y^2\right)}=e^{-\sigma\left(x^2+y^2\right)} e^{\sigma 2 x y}
