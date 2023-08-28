@@ -245,7 +245,7 @@ $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}
 
 我們可以令一個Gram matrix是這些內積 ${\rm{ < }}x,x{\rm{ > }}$ 與 ${\rm{ < }}y,y{\rm{ > }}$ 的組合，在寫問題的時候會更加的方便
 
-$$G = {\rm{ < }}x,x{{\rm{ > }}^{\rm{T}}} < x,y > $$
+$$G = {\rm{ < }}x,x{{\rm{ > }}^{\rm{T}}} < y,y > $$
 
 用cvxpy的包寫會更清楚一些
 ```
