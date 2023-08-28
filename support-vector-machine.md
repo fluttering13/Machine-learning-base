@@ -35,7 +35,7 @@ $$subject\ to\ wx + b = 0$$
 
 在最優化問題裡面objective function有一些等價的表述，我們去絕對值後，後續在數學的處理上會有一些好處(不會有尖點的問題)
 
-$$Ma{x_w}\ \  {1 \over {\left| w \right|}} = Mi{n_w}\,\left| w \right = Mi{n_w}{1 \over 2}{w^2}$$
+$$Ma{x_w}\ \ {1 \over {\left| w \right|}} = Mi{n_w}w{\rm{ }} = Mi{n_w}{1 \over 2}{w^2}$$
 
 $$subject \  to \  y \left( {wx + b} \right) \ge 1$$
 
@@ -254,7 +254,7 @@ constraints = [a <= 0, cp.sum(cp.multiply(a,y)) == 0] # KKT
 prob = cp.Problem(objective, constraints)
 result = prob.solve()
 ```
-乍看之下構建一個gram matrix 你需要 $O\left( {{n^2}} \right)$ 的複雜度(n為feature的數量)
+乍看之下構建一個gram matrix 你需要 $O\left( {{n^2}} \right)$ 的複雜度 (n為feature的數量)
 
 但因為gram matrix本身有很多對稱的特性，在數值處理上有很多逼近它的辦法，在運算上也可以省下一些資源
 
