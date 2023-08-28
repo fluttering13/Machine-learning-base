@@ -312,13 +312,17 @@ $$K: = {\left[ {k\left( {{x_i},{y_j}} \right)} \right]_{m \times m}}$$
 
 先前盡量寫出general的polynomial的例子可以在內積之後看成是
 
+$$\phi ({x_i}^T)\phi ({x_j}) = {\left( {\gamma {x_i}{x_j} + 1} \right)^d}$$
+
+這邊 $\gamma $ 只是控制對相似度辨識的權重，我們先暫時讓它等於1，實作上是去調它讓模型預測更
+
 $$\phi ({x_i}^T)\phi ({x_j}) = {\left( {{x_i}{x_j} + 1} \right)^d}$$
 
 例如說 $$d = 2$$
 
 我們可以得到
 
-$${{x_i}{x_j}}^2 + 2{x_i}{x_j} + 1$$
+$${\left( {{x_i}{x_j}} \right)^2} + 2{x_i}{x_j} + 1$$
 
 向量x寫成
 
@@ -337,6 +341,10 @@ x_1 x_2 \sqrt{2}
 $$
 
 ### Radial basis function kernel  (RBF)
+
+$$k\left( {{x_i},{x_j}} \right): = \exp \left( { - {{{{\left( {{x_i} - {x_j}} \right)}^2}} \over \gamma }} \right)$$
+
+這裡一樣先讓 $\gamma=1 $
 
 $$k\left( {{x_i},{x_j}} \right): = \exp \left( { - {{\left( {{x_i} - {x_j}} \right)}^2}} \right)$$
 
