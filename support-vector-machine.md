@@ -195,7 +195,7 @@ $$\alpha  \ge 0$$
 
 $$Mi{n_{w,b}}Ma{x_{\alpha  \ge 0}}{1 \over 2}w{w^T} + \alpha \sum\limits_i^N {1 - {y_i}\left( {w{x_n} + b} \right)} $$
 
-這邊我們可以看成$Mi{n_w}{1 \over 2}{w^2}$ 再加上要 Max constraints的部分
+這邊我們可以看成 $Mi{n_w}{1 \over 2}{w^2}$ 再加上要 Max constraints的部分
 
 意思是解完lagrange的問題要跟原本寫成 $Mi{n_w}{1 \over 2}{w^2}$ 原問題應該要有相同的bound
 
@@ -248,6 +248,8 @@ $$1 - y\left( {wx + b} \right) \le 0$$
 $$w=\sum_{i=1}^{m} {\alpha_i} {y_i}{x_i}=\sum_{\alpha_i=0}^{m} 0 {y_i}{x_i}+\sum_{\alpha_i \ge 0}^{m} {\alpha_i} {y_i}{x_i}=\sum_{i \in SV}^{m} {\alpha_i} {y_i}{x_i}$$
 
 如果我們把求導結果的w帶回去可以得到原問題可以寫成
+
+我們就說這是lagrange的dual
 
 $${1 \over 2}\sum\limits_i {\sum\limits_j {{\alpha _i}{\alpha _j}{y_i}{y_j}{x_i}^T} } {x_j} - \sum\limits_i {{\alpha _i}} $$
 
@@ -318,7 +320,7 @@ $$K =  < z,z' > $$
 
 $$\phi ({x_i}^T)\phi ({x_j}) = {\left( {\gamma {x_i}{x_j} + 1} \right)^d}$$
 
-這邊 $\gamma $ 只是控制對相似度辨識的權重，我們先暫時讓它等於1，實作上是去調它讓模型預測更
+這邊 $\gamma$ 只是控制對相似度辨識的權重，我們先暫時讓它等於1，實作上是去調它讓模型預測更
 
 $$\phi ({x_i}^T)\phi ({x_j}) = {\left( {{x_i}{x_j} + 1} \right)^d}$$
 
@@ -424,7 +426,9 @@ $I$ 為indicator function， $C$ 是用來權衡附加條件與原本的目標�
 
 $$s.t.\ {y_i}\left( {{w^T}\phi \left( x \right) + b} \right) \ge 1$$
 
-但這邊有個痛點，就是indicator function不連續，也不是凸函數，所以我們要在做一些手腳，讓整個東西看起來是線性的
+但這邊有個痛點，就是indicator function不連續，也不是凸函數，
+
+所以我們要在做一些手腳，讓整個東西看起來是線性的
 
 我們可以引入一個slack variable $\xi_i=$
 
@@ -435,10 +439,6 @@ $$
 \end{array}\right.
 $$
 
-原問題就寫成
-
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq3.png" width="200px"/></div
-
 新的lagrange寫成
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq4.png.png" width="350px"/></div
@@ -447,10 +447,23 @@ $$
 
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq5.png.png" width="200px"/></div
 
+然後dual的largange就可以寫出來
+
+$$Mi{n_\alpha }{1 \over 2}\sum\limits_{i = 1}^N \sum\limits_{j = 1}^N {{\alpha _i}{\alpha _j}{y_i}{y_j}x_n^T{x_m}}$$
+
+$$-\sum\limits_{i = 1}^N {{\alpha _i}} $$
+
+$$subject\ to\ \sum\limits_{i = 1}^N {{y_i}{\alpha _i} = 0} ,\ 0 \le {\alpha _i} \le C,for\ i = 1,2,3......$$
+
+當我們加入了這個slack variable，其實只是等同於我們在dual裡面對每一個 $\alpha_i$ 增加了了一個上限C
+
+也就是說相較於原本的dual這邊min裡面扣除的 $\alpha_i$ 有被限制，意味著更寬鬆的邊界或是允許了一些error
+
 最後來看看做的怎麼樣，把前面的code的註解打開就是softmargin的版本
 
 只是添加了一個關於 $\xi$ 的參數
 ```
+C=1
 obj=cvx.Minimize(cvx.square(cvx.norm(cvx.vec(w)))+C*cvx.sum(xi))
 constraints=[]
 constraints.append(cvx.vec(cvx.multiply(y,w@x+b))>=1-xi)
