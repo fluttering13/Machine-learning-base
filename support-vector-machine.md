@@ -304,9 +304,13 @@ $$k({x_i},{x_j}) = \langle \phi ({x_i}),\phi ({x_j})\rangle $$
 
 ### Mercer condition
 
-核函數對應的矩 必須為半正定的
+核函數(Kneral)對應的矩 必須為半正定的
 
 $$K: = {\left[ {k\left( {{x_i},{y_j}} \right)} \right]_{m \times m}}$$
+
+也就是說這個矩陣一定可以滿足 $z$ 跟 $z'$ 的 內積相乘
+
+$$K =  < z,z' > $$
 
 ### polynomial knernal
 
