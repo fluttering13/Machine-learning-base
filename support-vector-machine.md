@@ -11,7 +11,9 @@
 
 把線性可以做得到的事情最大化
 
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM1.png" width="300px"/></div
+<p align="center">
+  <img src="./pic/SVM1.png" width="300px"/>
+</p>
 
 如果今天是在二維數據裡面做二分類的問題，我們就是在找一條線去割開這兩個分類
 
@@ -21,19 +23,22 @@
 
 就很像是我們在這個兩個數據間找一條馬路，馬路的中間就是所謂的超平面，馬路的邊邊叫作support vector
 
-所以我們要做的就是對這個邊界越寬越好，去最大化Margin
+所以我們可以想像成最大化這個邊界(Margin)越寬越好
 
 $$Ma{x_w}\ {{wx' + b} \over {\left| w \right|}}$$
 
 $$subject\ to\ wx + b = 0$$
 
-我們還要加入一下標籤y的資訊，從相關性的角度入手，就是對我們的分類線 $wx+b$ 做一下內積後要求都要是同一
+在這邊 $x'$ 就是input的數據，已經被給定所以是個常數，後面我們把它去掉來簡化
+
+我們還要加入一下標籤y的資訊，從相關性的角度入手，就是對我們的分類線 $wx+b$做內積。也就是說，當點落在線上面我們就說這是+1；點落在下面就說是-1
 
 物理意義也就是support vector外的都是某一類分類，讓約束條件更簡潔一些
 
-如果 $w',b'$ 是最佳解，那麼 $cw',cb'$ 即縮放也會是最佳解，所以我們隨便選一個數字，例如1作為約束的值來簡化問題
+再來我們運用一下數學性質來設定我們要怎麼列下不等式：如果 $w',b'$ 是最佳解，那麼 $cw',cb'$ 即縮放也會是最佳解，所以我們隨便選一個數字，例如1作為約束的值來簡化問題
 
-在這邊 $x'$ 就是input的數據，已經被給定所以是個常數，我們把它去掉來簡化
+$$y(wx+b) \ge 1$$
+
 
 在最優化問題裡面objective function有一些等價的表述，我們去絕對值後，後續在數學的處理上會有一些好處(不會有尖點的問題)
 
@@ -332,9 +337,12 @@ $${\left( {{x_i}{x_j}} \right)^2} + 2{x_i}{x_j} + 1$$
 
 向量x寫成
 
-$$x = \left[ \matrix{
-  {x_1} \hfill \cr 
-  {x_2} \hfill \cr}  \right]$$
+$$x = \left[
+\begin{matrix}
+x_1\\
+x_2\\
+\end{matrix}
+\right]$$
   
 x的映射關係從 ${R^2} \mapsto {R^3}$ 寫成
 
@@ -430,9 +438,9 @@ $$s.t.\ {y_i}\left( {{w^T}\phi \left( x \right) + b} \right) \ge 1$$
 
 所以我們要在做一些手腳，讓整個東西看起來是線性的
 
-我們可以引入一個slack variable $\xi_i=$
+我們可以引入一個slack variable
 
-$$
+$$\xi_i=
 \left\{\begin{array}{l}
 0 \quad, \text { if } y_i\left(w^T \phi(x)+b\right) \geq 1 \\
 1-y_i\left(w^T \phi\left(x_i\right)+b\right), \text { else }
@@ -440,12 +448,14 @@ $$
 $$
 
 新的lagrange寫成
+$$L(w,b,\xi,\alpha,\beta)=\frac{1}{2}w^Tw+C\sum_{i=1}^m\xi\\+\sum_{i=1}^m\alpha_i(1-\xi_i-y_i(w^T\phi(x_i)+b))+\sum_{i=1}^m\beta_i(-\xi_i)$$
 
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq4.png.png" width="350px"/></div
 
 求偏導
+$$\frac{\partial L}{\partial w}=0  \Rightarrow w= \sum_{i=1}^{m} \alpha_i y_i \phi(x_i)$$
+$$\frac{\partial L}{\partial b}=0  \Rightarrow w= \sum_{i=1}^{m} \alpha_i y_i =0$$
+$$\frac{\partial L}{\partial \xi}=0  \Rightarrow \alpha_i+\beta_i=C$$
 
-<div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-eq5.png.png" width="200px"/></div
 
 然後dual的largange就可以寫出來
 
@@ -474,6 +484,7 @@ constraints.append(xi>=0)
 <div align=center><img src="https://raw.githubusercontent.com/fluttering13/Machine-learning-base/master/pic/SVM-pic2.png" width="500px"/></div
 
 搞定！
+
 ## Softmargin and regularization
 
 最後一件事情就是原問題其實可以等價成下列，也就是做了一個正則化
